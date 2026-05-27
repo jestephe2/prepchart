@@ -1,7 +1,9 @@
 'use client'
 
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { useMemo, useState } from 'react'
+import { useLongPress } from '@/hooks/useLongPress'
 import type { Surgeon } from '@/lib/schemas'
 
 export function SurgeonList({ surgeons }: { surgeons: Surgeon[] }) {
@@ -43,27 +45,58 @@ export function SurgeonList({ surgeons }: { surgeons: Surgeon[] }) {
       ) : (
         <ul className="space-y-2">
           {filtered.map((s) => (
-            <li key={s.id}>
-              <Link
-                href={`/surgeons/${s.id}`}
-                className="flex items-center gap-4 rounded-md border border-[#1a2332] bg-[#0d1117] p-4"
-              >
-                <div className="w-12 h-12 rounded-full bg-[#052e16] text-[#4ade80] flex items-center justify-center font-semibold text-sm shrink-0">
-                  {s.initials ?? initialsFromName(s.name)}
-                </div>
-                <div className="min-w-0 flex-1">
-                  <div className="font-medium truncate">{s.name}</div>
-                  <div className="text-xs text-white/50 mt-0.5 truncate">
-                    {[s.specialty, s.hospital].filter(Boolean).join(' • ') ||
-                      'No specialty set'}
-                  </div>
-                </div>
-              </Link>
-            </li>
+            <SurgeonRow key={s.id} surgeon={s} />
           ))}
         </ul>
       )}
     </>
+  )
+}
+
+function SurgeonRow({ surgeon }: { surgeon: Surgeon }) {
+  const router = useRouter()
+  const [deleting, setDeleting] = useState(false)
+
+  async function confirmAndDelete() {
+    if (deleting) return
+    const ok = window.confirm(
+      `Delete ${surgeon.name}? This will also delete all their procedures and preferences. This cannot be undone.`
+    )
+    if (!ok) return
+
+    setDeleting(true)
+    const res = await fetch(`/api/surgeons/${surgeon.id}`, { method: 'DELETE' })
+    setDeleting(false)
+    if (!res.ok) {
+      window.alert('Could not delete surgeon. Try again.')
+      return
+    }
+    router.refresh()
+  }
+
+  const longPress = useLongPress(confirmAndDelete)
+
+  return (
+    <li>
+      <Link
+        href={`/surgeons/${surgeon.id}`}
+        {...longPress}
+        className={`flex items-center gap-4 rounded-md border border-[#1a2332] bg-[#0d1117] p-4 select-none ${
+          deleting ? 'opacity-50 pointer-events-none' : ''
+        }`}
+      >
+        <div className="w-12 h-12 rounded-full bg-[#052e16] text-[#4ade80] flex items-center justify-center font-semibold text-sm shrink-0">
+          {surgeon.initials ?? initialsFromName(surgeon.name)}
+        </div>
+        <div className="min-w-0 flex-1">
+          <div className="font-medium truncate">{surgeon.name}</div>
+          <div className="text-xs text-white/50 mt-0.5 truncate">
+            {[surgeon.specialty, surgeon.hospital].filter(Boolean).join(' • ') ||
+              'No specialty set'}
+          </div>
+        </div>
+      </Link>
+    </li>
   )
 }
 

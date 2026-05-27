@@ -61,7 +61,7 @@ export default async function ProcedurePage({
           </section>
         )}
 
-        <PreferenceTabs procedure={procedure} implants={implants} />
+        <PreferenceTabs procedure={procedure} implants={implants} flags={flags} />
       </main>
       <BottomNav />
     </>

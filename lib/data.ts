@@ -1,6 +1,89 @@
 import { SupabaseClient } from '@supabase/supabase-js'
 import { Surgeon, Procedure, ImplantPreference, Flag } from './schemas'
 
+export async function insertSurgeon(
+  supabase: SupabaseClient,
+  row: {
+    user_id: string
+    name: string
+    specialty?: string | null
+    hospital?: string | null
+    initials?: string | null
+  }
+): Promise<Surgeon> {
+  const { data, error } = await supabase
+    .from('surgeons')
+    .insert(row)
+    .select()
+    .single()
+  if (error) throw new Error(`insertSurgeon failed: ${error.message}`)
+  return data
+}
+
+export async function updateProcedure(
+  supabase: SupabaseClient,
+  id: string,
+  patch: Partial<{
+    setup_notes: string | null
+    timing_notes: string | null
+    rep_notes: string | null
+    name: string
+    sub_type: string | null
+    icon: string
+  }>
+): Promise<Procedure> {
+  const { data, error } = await supabase
+    .from('procedures')
+    .update(patch)
+    .eq('id', id)
+    .select()
+    .single()
+  if (error) throw new Error(`updateProcedure failed: ${error.message}`)
+  return data
+}
+
+export async function insertProcedure(
+  supabase: SupabaseClient,
+  row: {
+    surgeon_id: string
+    name: string
+    sub_type?: string | null
+    icon?: string
+  }
+): Promise<Procedure> {
+  const { data, error } = await supabase
+    .from('procedures')
+    .insert(row)
+    .select()
+    .single()
+  if (error) throw new Error(`insertProcedure failed: ${error.message}`)
+  return data
+}
+
+export async function deleteSurgeon(
+  supabase: SupabaseClient,
+  id: string
+): Promise<number> {
+  const { count, error } = await supabase
+    .from('surgeons')
+    .delete({ count: 'exact' })
+    .eq('id', id)
+  if (error) throw new Error(`deleteSurgeon failed: ${error.message}`)
+  return count ?? 0
+}
+
+export async function deleteProcedure(
+  supabase: SupabaseClient,
+  id: string
+): Promise<number> {
+  const { count, error } = await supabase
+    .from('procedures')
+    .delete({ count: 'exact' })
+    .eq('id', id)
+  if (error) throw new Error(`deleteProcedure failed: ${error.message}`)
+  return count ?? 0
+}
+
 export async function getSurgeons(supabase: SupabaseClient): Promise<Surgeon[]> {
   const { data, error } = await supabase
     .from('surgeons')
@@ -75,6 +158,64 @@ export async function getProcedure(
     .maybeSingle()
   if (error) throw new Error(`getProcedure failed: ${error.message}`)
   return data
+}
+
+export async function insertImplants(
+  supabase: SupabaseClient,
+  procedureId: string,
+  rows: Array<{
+    preference_type: string
+    implant_name: string
+    part_number?: string | null
+    detail_notes?: string | null
+  }>
+): Promise<ImplantPreference[]> {
+  if (rows.length === 0) return []
+  const payload = rows.map((r) => ({ ...r, procedure_id: procedureId }))
+  const { data, error } = await supabase
+    .from('implant_preferences')
+    .insert(payload)
+    .select()
+  if (error) throw new Error(`insertImplants failed: ${error.message}`)
+  return data ?? []
+}
+
+export async function deleteAllImplantsForProcedure(
+  supabase: SupabaseClient,
+  procedureId: string
+): Promise<void> {
+  const { error } = await supabase
+    .from('implant_preferences')
+    .delete()
+    .eq('procedure_id', procedureId)
+  if (error)
+    throw new Error(`deleteAllImplantsForProcedure failed: ${error.message}`)
+}
+
+export async function insertFlags(
+  supabase: SupabaseClient,
+  procedureId: string,
+  texts: string[]
+): Promise<Flag[]> {
+  if (texts.length === 0) return []
+  const rows = texts.map((text) => ({ procedure_id: procedureId, text }))
+  const { data, error } = await supabase
+    .from('flags')
+    .insert(rows)
+    .select()
+  if (error) throw new Error(`insertFlags failed: ${error.message}`)
+  return data ?? []
+}
+
+export async function deleteAllFlagsForProcedure(
+  supabase: SupabaseClient,
+  procedureId: string
+): Promise<void> {
+  const { error } = await supabase
+    .from('flags')
+    .delete()
+    .eq('procedure_id', procedureId)
+  if (error) throw new Error(`deleteAllFlagsForProcedure failed: ${error.message}`)
 }
 
 export async function getPreferences(

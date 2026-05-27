@@ -67,6 +67,21 @@ export const UpsertImplantSchema = ImplantPreferenceSchema.pick({
   detail_notes: true,
 })
 
+export const UpdateProcedureNotesSchema = ProcedureSchema.pick({
+  setup_notes: true,
+  timing_notes: true,
+  rep_notes: true,
+}).partial()
+
+export const ReplaceFlagsSchema = z.object({
+  texts: z.array(z.string()),
+})
+
+export const ReplaceImplantsSchema = z.object({
+  items: z.array(UpsertImplantSchema),
+})
+
 export type CreateSurgeonInput = z.infer<typeof CreateSurgeonSchema>
 export type CreateProcedureInput = z.infer<typeof CreateProcedureSchema>
 export type UpsertImplantInput = z.infer<typeof UpsertImplantSchema>
+export type UpdateProcedureNotesInput = z.infer<typeof UpdateProcedureNotesSchema>

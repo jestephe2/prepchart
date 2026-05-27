@@ -3,7 +3,7 @@
 ## What This Is
 Mobile-first PWA for surgical device reps. Core flow: Surgeon → Procedure → Preference Card.
 
-**Current Phase: 1 — Tracer Bullet**
+**Current Phase: 2 — Write Layer**
 
 ## Stack
 Next.js 16 App Router, TypeScript, Tailwind, Zod, Supabase, Vercel. PWA via next-pwa.

@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import { getSurgeon, getProcedures } from '@/lib/data'
 import { BottomNav } from '@/components/BottomNav'
+import { ProcedureList } from '@/components/ProcedureList'
 
 export default async function SurgeonPage({
   params,
@@ -43,34 +44,14 @@ export default async function SurgeonPage({
           <h2 className="text-xs uppercase tracking-wide text-white/50 mb-3">
             Procedures
           </h2>
-          {procedures.length === 0 ? (
-            <div className="rounded-md border border-[#1a2332] bg-[#0d1117] p-6 text-center text-sm text-white/60">
-              No procedures yet for {surgeon.name}.
-            </div>
-          ) : (
-            <ul className="space-y-2">
-              {procedures.map((p) => (
-                <li key={p.id}>
-                  <Link
-                    href={`/surgeons/${id}/procedures/${p.id}`}
-                    className="flex items-center gap-4 rounded-md border border-[#1a2332] bg-[#0d1117] p-4"
-                  >
-                    <div className="w-10 h-10 rounded-md bg-[#1a2332] flex items-center justify-center text-xl shrink-0">
-                      {p.icon || '🔩'}
-                    </div>
-                    <div className="min-w-0 flex-1">
-                      <div className="font-medium truncate">{p.name}</div>
-                      {p.sub_type && (
-                        <div className="text-xs text-white/50 mt-0.5 truncate">
-                          {p.sub_type}
-                        </div>
-                      )}
-                    </div>
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          )}
+          <ProcedureList surgeonId={id} procedures={procedures} />
+
+          <Link
+            href={`/surgeons/${id}/procedures/new`}
+            className="mt-3 flex items-center justify-center gap-2 rounded-md border border-dashed border-[#1a2332] py-3 text-sm text-[#4ade80]"
+          >
+            + Add procedure
+          </Link>
         </section>
       </main>
       <BottomNav />
