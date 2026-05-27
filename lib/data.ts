@@ -60,6 +60,26 @@ export async function insertProcedure(
   return data
 }
 
+export async function updateSurgeon(
+  supabase: SupabaseClient,
+  id: string,
+  patch: Partial<{
+    name: string
+    specialty: string | null
+    hospital: string | null
+    initials: string | null
+  }>
+): Promise<Surgeon> {
+  const { data, error } = await supabase
+    .from('surgeons')
+    .update(patch)
+    .eq('id', id)
+    .select()
+    .single()
+  if (error) throw new Error(`updateSurgeon failed: ${error.message}`)
+  return data
+}
+
 export async function deleteSurgeon(
   supabase: SupabaseClient,
   id: string

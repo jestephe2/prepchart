@@ -2,9 +2,9 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import { getSurgeon } from '@/lib/data'
-import { ProcedureForm } from '@/components/ProcedureForm'
+import { SurgeonForm } from '@/components/SurgeonForm'
 
-export default async function NewProcedurePage({
+export default async function EditSurgeonPage({
   params,
 }: {
   params: Promise<{ id: string }>
@@ -22,12 +22,18 @@ export default async function NewProcedurePage({
         </Link>
       </div>
 
-      <header className="mb-8">
-        <p className="text-sm text-white/50 mb-1">For {surgeon.name}</p>
-        <h1 className="text-2xl font-semibold">Add procedure</h1>
-      </header>
+      <h1 className="text-2xl font-semibold mb-8">Edit surgeon</h1>
 
-      <ProcedureForm mode="create" surgeonId={id} />
+      <SurgeonForm
+        mode="edit"
+        surgeonId={id}
+        initial={{
+          name: surgeon.name,
+          specialty: surgeon.specialty ?? null,
+          hospital: surgeon.hospital ?? null,
+          initials: surgeon.initials ?? null,
+        }}
+      />
     </main>
   )
 }

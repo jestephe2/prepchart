@@ -6,11 +6,27 @@ import { CreateProcedureSchema } from '@/lib/schemas'
 
 const ICONS = ['🔩', '🦴', '🩻', '🦵', '🤲', '🧠', '❤️', '⚙️'] as const
 
-export function NewProcedureForm({ surgeonId }: { surgeonId: string }) {
+export type ProcedureFormInitial = {
+  name: string
+  sub_type: string | null
+  icon: string
+}
+
+export function ProcedureForm({
+  mode,
+  surgeonId,
+  procedureId,
+  initial,
+}: {
+  mode: 'create' | 'edit'
+  surgeonId: string
+  procedureId?: string
+  initial?: ProcedureFormInitial
+}) {
   const router = useRouter()
-  const [name, setName] = useState('')
-  const [subType, setSubType] = useState('')
-  const [icon, setIcon] = useState<string>(ICONS[0])
+  const [name, setName] = useState(initial?.name ?? '')
+  const [subType, setSubType] = useState(initial?.sub_type ?? '')
+  const [icon, setIcon] = useState<string>(initial?.icon || ICONS[0])
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
   const [submitError, setSubmitError] = useState<string | null>(null)
   const [submitting, setSubmitting] = useState(false)
@@ -38,11 +54,21 @@ export function NewProcedureForm({ surgeonId }: { surgeonId: string }) {
     }
 
     setSubmitting(true)
-    const res = await fetch('/api/procedures', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ ...parsed.data, surgeon_id: surgeonId }),
-    })
+
+    let res: Response
+    if (mode === 'edit') {
+      res = await fetch(`/api/procedures/${procedureId}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(parsed.data),
+      })
+    } else {
+      res = await fetch('/api/procedures', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ...parsed.data, surgeon_id: surgeonId }),
+      })
+    }
 
     if (!res.ok) {
       setSubmitting(false)
@@ -63,7 +89,7 @@ export function NewProcedureForm({ surgeonId }: { surgeonId: string }) {
           type="text"
           required
           autoComplete="off"
-          autoFocus
+          autoFocus={mode === 'create'}
           value={name}
           onChange={(e) => setName(e.target.value)}
           placeholder="ACL Reconstruction"
@@ -111,16 +137,18 @@ export function NewProcedureForm({ surgeonId }: { surgeonId: string }) {
         </div>
       </div>
 
-      {submitError && (
-        <p className="text-sm text-[#fb923c]">{submitError}</p>
-      )}
+      {submitError && <p className="text-sm text-[#fb923c]">{submitError}</p>}
 
       <button
         type="submit"
         disabled={submitting || !name.trim()}
         className="w-full rounded-md bg-[#4ade80] text-[#052e16] font-semibold py-3 disabled:opacity-50"
       >
-        {submitting ? 'Saving…' : 'Add procedure'}
+        {submitting
+          ? 'Saving…'
+          : mode === 'edit'
+          ? 'Save changes'
+          : 'Add procedure'}
       </button>
     </form>
   )

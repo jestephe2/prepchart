@@ -3,7 +3,7 @@
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useMemo, useState } from 'react'
-import { useLongPress } from '@/hooks/useLongPress'
+import { RowMenu } from '@/components/RowMenu'
 import type { Surgeon } from '@/lib/schemas'
 
 export function SurgeonList({ surgeons }: { surgeons: Surgeon[] }) {
@@ -74,16 +74,11 @@ function SurgeonRow({ surgeon }: { surgeon: Surgeon }) {
     router.refresh()
   }
 
-  const longPress = useLongPress(confirmAndDelete)
-
   return (
-    <li>
+    <li className={`relative ${deleting ? 'opacity-50 pointer-events-none' : ''}`}>
       <Link
         href={`/surgeons/${surgeon.id}`}
-        {...longPress}
-        className={`flex items-center gap-4 rounded-md border border-[#1a2332] bg-[#0d1117] p-4 select-none ${
-          deleting ? 'opacity-50 pointer-events-none' : ''
-        }`}
+        className="flex items-center gap-4 rounded-md border border-[#1a2332] bg-[#0d1117] p-4 pr-14"
       >
         <div className="w-12 h-12 rounded-full bg-[#052e16] text-[#4ade80] flex items-center justify-center font-semibold text-sm shrink-0">
           {surgeon.initials ?? initialsFromName(surgeon.name)}
@@ -96,6 +91,15 @@ function SurgeonRow({ surgeon }: { surgeon: Surgeon }) {
           </div>
         </div>
       </Link>
+      <div className="absolute inset-y-0 right-2 flex items-center">
+        <RowMenu
+          triggerLabel={`Actions for ${surgeon.name}`}
+          items={[
+            { label: 'Edit', href: `/surgeons/${surgeon.id}/edit` },
+            { label: 'Delete', onClick: confirmAndDelete, danger: true },
+          ]}
+        />
+      </div>
     </li>
   )
 }

@@ -3,7 +3,7 @@
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
-import { useLongPress } from '@/hooks/useLongPress'
+import { RowMenu } from '@/components/RowMenu'
 import type { Procedure } from '@/lib/schemas'
 
 export function ProcedureList({
@@ -59,16 +59,11 @@ function ProcedureRow({
     router.refresh()
   }
 
-  const longPress = useLongPress(confirmAndDelete)
-
   return (
-    <li>
+    <li className={`relative ${deleting ? 'opacity-50 pointer-events-none' : ''}`}>
       <Link
         href={`/surgeons/${surgeonId}/procedures/${procedure.id}`}
-        {...longPress}
-        className={`flex items-center gap-4 rounded-md border border-[#1a2332] bg-[#0d1117] p-4 select-none ${
-          deleting ? 'opacity-50 pointer-events-none' : ''
-        }`}
+        className="flex items-center gap-4 rounded-md border border-[#1a2332] bg-[#0d1117] p-4 pr-14"
       >
         <div className="w-10 h-10 rounded-md bg-[#1a2332] flex items-center justify-center text-xl shrink-0">
           {procedure.icon || '🔩'}
@@ -82,6 +77,18 @@ function ProcedureRow({
           )}
         </div>
       </Link>
+      <div className="absolute inset-y-0 right-2 flex items-center">
+        <RowMenu
+          triggerLabel={`Actions for ${procedure.name}`}
+          items={[
+            {
+              label: 'Edit',
+              href: `/surgeons/${surgeonId}/procedures/${procedure.id}/edit`,
+            },
+            { label: 'Delete', onClick: confirmAndDelete, danger: true },
+          ]}
+        />
+      </div>
     </li>
   )
 }

@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
-import { deleteProcedure, updateProcedureNotes } from '@/lib/procedures'
-import { UpdateProcedureNotesSchema } from '@/lib/schemas'
+import { deleteProcedure, updateProcedureFields } from '@/lib/procedures'
+import { UpdateProcedureSchema } from '@/lib/schemas'
 
 export async function PATCH(
   request: Request,
@@ -17,7 +17,7 @@ export async function PATCH(
   }
 
   const body = await request.json().catch(() => null)
-  const result = UpdateProcedureNotesSchema.safeParse(body)
+  const result = UpdateProcedureSchema.safeParse(body)
   if (!result.success) {
     return NextResponse.json(
       { error: 'Invalid input', issues: result.error.flatten() },
@@ -25,7 +25,7 @@ export async function PATCH(
     )
   }
 
-  const procedure = await updateProcedureNotes(supabase, id, result.data)
+  const procedure = await updateProcedureFields(supabase, id, result.data)
   return NextResponse.json(procedure)
 }
 

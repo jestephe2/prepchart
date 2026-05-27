@@ -7,7 +7,7 @@ import {
 import type {
   CreateProcedureInput,
   Procedure,
-  UpdateProcedureNotesInput,
+  UpdateProcedureInput,
 } from '@/lib/schemas'
 
 export async function deleteProcedure(
@@ -31,12 +31,21 @@ export async function createProcedure(
   })
 }
 
-export async function updateProcedureNotes(
+export async function updateProcedureFields(
   supabase: SupabaseClient,
   procedureId: string,
-  input: UpdateProcedureNotesInput
+  input: UpdateProcedureInput
 ): Promise<Procedure> {
   const patch: Record<string, string | null> = {}
+  if (input.name !== undefined) {
+    patch.name = input.name.trim()
+  }
+  if (input.sub_type !== undefined) {
+    patch.sub_type = input.sub_type?.trim() || null
+  }
+  if (input.icon !== undefined) {
+    patch.icon = input.icon?.trim() || '🔩'
+  }
   if (input.setup_notes !== undefined) {
     patch.setup_notes = input.setup_notes?.trim() || null
   }

@@ -1,5 +1,9 @@
 import { SupabaseClient } from '@supabase/supabase-js'
-import { deleteSurgeon as deleteSurgeonRow, insertSurgeon } from '@/lib/data'
+import {
+  deleteSurgeon as deleteSurgeonRow,
+  insertSurgeon,
+  updateSurgeon as updateSurgeonRow,
+} from '@/lib/data'
 import type { CreateSurgeonInput, Surgeon } from '@/lib/schemas'
 
 export async function deleteSurgeon(
@@ -18,6 +22,20 @@ export async function createSurgeon(
   const initials = input.initials?.trim() || initialsFromName(input.name)
   return insertSurgeon(supabase, {
     user_id: userId,
+    name: input.name.trim(),
+    specialty: input.specialty?.trim() || null,
+    hospital: input.hospital?.trim() || null,
+    initials: initials || null,
+  })
+}
+
+export async function updateSurgeon(
+  supabase: SupabaseClient,
+  id: string,
+  input: CreateSurgeonInput
+): Promise<Surgeon> {
+  const initials = input.initials?.trim() || initialsFromName(input.name)
+  return updateSurgeonRow(supabase, id, {
     name: input.name.trim(),
     specialty: input.specialty?.trim() || null,
     hospital: input.hospital?.trim() || null,
