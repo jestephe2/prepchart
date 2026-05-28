@@ -30,16 +30,16 @@ export function SurgeonList({ surgeons }: { surgeons: Surgeon[] }) {
           placeholder="Search surgeons"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
-          className="w-full rounded-md bg-[#0d1117] border border-[#1a2332] px-4 py-3 text-base focus:outline-none focus:border-[#4ade80]"
+          className="w-full rounded-md bg-surface-card border border-border px-4 py-3 text-base focus:outline-none focus:border-accent"
         />
       </div>
 
       {surgeons.length === 0 ? (
-        <div className="rounded-md border border-[#1a2332] bg-[#0d1117] p-6 text-center text-sm text-white/60">
+        <div className="rounded-md border border-border bg-surface-card p-6 text-center text-sm text-white/60">
           No surgeons yet. Tap + to add your first.
         </div>
       ) : filtered.length === 0 ? (
-        <div className="rounded-md border border-[#1a2332] bg-[#0d1117] p-6 text-center text-sm text-white/60">
+        <div className="rounded-md border border-border bg-surface-card p-6 text-center text-sm text-white/60">
           No matches for &ldquo;{query}&rdquo;.
         </div>
       ) : (
@@ -78,9 +78,9 @@ function SurgeonRow({ surgeon }: { surgeon: Surgeon }) {
     <li className={`relative ${deleting ? 'opacity-50 pointer-events-none' : ''}`}>
       <Link
         href={`/surgeons/${surgeon.id}`}
-        className="flex items-center gap-4 rounded-md border border-[#1a2332] bg-[#0d1117] p-4 pr-14"
+        className="flex items-center gap-4 rounded-md border border-border bg-surface-card p-4 pr-14"
       >
-        <div className="w-12 h-12 rounded-full bg-[#052e16] text-[#4ade80] flex items-center justify-center font-semibold text-sm shrink-0">
+        <div className="w-12 h-12 rounded-full bg-accent-dark text-accent flex items-center justify-center font-semibold text-sm shrink-0">
           {surgeon.initials ?? initialsFromName(surgeon.name)}
         </div>
         <div className="min-w-0 flex-1">

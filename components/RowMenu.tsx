@@ -55,7 +55,7 @@ export function RowMenu({
           stop(e)
           setOpen((v) => !v)
         }}
-        className="flex items-center justify-center w-9 h-9 rounded-md text-white/70 hover:bg-[#1a2332] active:bg-[#1a2332] text-lg leading-none"
+        className="flex items-center justify-center w-9 h-9 rounded-md text-white/70 hover:bg-border active:bg-border text-lg leading-none"
       >
         <span aria-hidden="true">⋯</span>
       </button>
@@ -63,7 +63,7 @@ export function RowMenu({
       {open && (
         <div
           role="menu"
-          className="absolute right-0 top-full mt-1 min-w-[140px] rounded-md border border-[#1a2332] bg-[#0d1117] shadow-lg z-20 py-1"
+          className="absolute right-0 top-full mt-1 min-w-[140px] rounded-md border border-border bg-surface-card shadow-lg z-20 py-1"
         >
           {items.map((item, i) =>
             item.href ? (
@@ -74,8 +74,8 @@ export function RowMenu({
                 onClick={() => setOpen(false)}
                 onPointerDown={(e) => e.stopPropagation()}
                 className={`block px-4 py-2 text-sm ${
-                  item.danger ? 'text-[#fb923c]' : 'text-white/90'
-                } hover:bg-[#1a2332]`}
+                  item.danger ? 'text-flag' : 'text-white/90'
+                } hover:bg-border`}
               >
                 {item.label}
               </Link>
@@ -91,8 +91,8 @@ export function RowMenu({
                   item.onClick?.()
                 }}
                 className={`block w-full text-left px-4 py-2 text-sm ${
-                  item.danger ? 'text-[#fb923c]' : 'text-white/90'
-                } hover:bg-[#1a2332]`}
+                  item.danger ? 'text-flag' : 'text-white/90'
+                } hover:bg-border`}
               >
                 {item.label}
               </button>

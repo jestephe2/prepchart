@@ -2,7 +2,9 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import { getSurgeon } from '@/lib/data'
+import { canAddProcedure } from '@/lib/subscriptions'
 import { ProcedureForm } from '@/components/ProcedureForm'
+import { UpgradePrompt } from '@/components/UpgradePrompt'
 
 export default async function NewProcedurePage({
   params,
@@ -13,6 +15,8 @@ export default async function NewProcedurePage({
   const supabase = await createClient()
   const surgeon = await getSurgeon(supabase, id)
   if (!surgeon) notFound()
+
+  const allowed = await canAddProcedure(supabase, id)
 
   return (
     <main className="flex-1 px-6 pt-12 pb-12">
@@ -27,7 +31,11 @@ export default async function NewProcedurePage({
         <h1 className="text-2xl font-semibold">Add procedure</h1>
       </header>
 
-      <ProcedureForm mode="create" surgeonId={id} />
+      {allowed ? (
+        <ProcedureForm mode="create" surgeonId={id} />
+      ) : (
+        <UpgradePrompt kind="procedure" />
+      )}
     </main>
   )
 }

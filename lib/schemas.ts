@@ -55,6 +55,10 @@ export const UserProfileSchema = z.object({
   user_id: z.string().uuid(),
   onboarding_complete: z.boolean(),
   created_at: z.string().optional(),
+  stripe_customer_id: z.string().nullable().optional(),
+  stripe_subscription_id: z.string().nullable().optional(),
+  subscription_status: z.string().nullable().optional(),
+  subscription_end: z.string().nullable().optional(),
 })
 
 export type Surgeon = z.infer<typeof SurgeonSchema>

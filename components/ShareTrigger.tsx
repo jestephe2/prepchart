@@ -18,7 +18,7 @@ export function ShareTrigger({
         type="button"
         onClick={() => setOpen(true)}
         aria-label="Share preference card"
-        className="rounded-md border border-[#1a2332] bg-[#0d1117] px-3 py-2 text-sm text-[#4ade80]"
+        className="rounded-md border border-border bg-surface-card px-3 py-2 text-sm text-accent"
       >
         Share
       </button>

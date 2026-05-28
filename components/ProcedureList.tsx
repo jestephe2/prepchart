@@ -15,7 +15,7 @@ export function ProcedureList({
 }) {
   if (procedures.length === 0) {
     return (
-      <div className="rounded-md border border-[#1a2332] bg-[#0d1117] p-6 text-center text-sm text-white/60">
+      <div className="rounded-md border border-border bg-surface-card p-6 text-center text-sm text-white/60">
         No procedures yet.
       </div>
     )
@@ -63,9 +63,9 @@ function ProcedureRow({
     <li className={`relative ${deleting ? 'opacity-50 pointer-events-none' : ''}`}>
       <Link
         href={`/surgeons/${surgeonId}/procedures/${procedure.id}`}
-        className="flex items-center gap-4 rounded-md border border-[#1a2332] bg-[#0d1117] p-4 pr-14"
+        className="flex items-center gap-4 rounded-md border border-border bg-surface-card p-4 pr-14"
       >
-        <div className="w-10 h-10 rounded-md bg-[#1a2332] flex items-center justify-center text-xl shrink-0">
+        <div className="w-10 h-10 rounded-md bg-border flex items-center justify-center text-xl shrink-0">
           {procedure.icon || '🔩'}
         </div>
         <div className="min-w-0 flex-1">

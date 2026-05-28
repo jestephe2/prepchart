@@ -3,6 +3,7 @@
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { CreateProcedureSchema } from '@/lib/schemas'
+import { UpgradePrompt } from '@/components/UpgradePrompt'
 
 const ICONS = ['🔩', '🦴', '🩻', '🦵', '🤲', '🧠', '❤️', '⚙️'] as const
 
@@ -32,6 +33,7 @@ export function ProcedureForm({
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
   const [submitError, setSubmitError] = useState<string | null>(null)
   const [submitting, setSubmitting] = useState(false)
+  const [capReached, setCapReached] = useState(false)
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
@@ -72,6 +74,12 @@ export function ProcedureForm({
       })
     }
 
+    if (res.status === 402) {
+      setSubmitting(false)
+      setCapReached(true)
+      return
+    }
+
     if (!res.ok) {
       setSubmitting(false)
       const body = await res.json().catch(() => null)
@@ -87,6 +95,10 @@ export function ProcedureForm({
     router.refresh()
   }
 
+  if (capReached) {
+    return <UpgradePrompt kind="procedure" />
+  }
+
   return (
     <form onSubmit={handleSubmit} className="space-y-5">
       <Field label="Procedure name" error={fieldErrors.name}>
@@ -98,7 +110,7 @@ export function ProcedureForm({
           value={name}
           onChange={(e) => setName(e.target.value)}
           placeholder="ACL Reconstruction"
-          className="w-full rounded-md bg-[#0d1117] border border-[#1a2332] px-4 py-3 text-base focus:outline-none focus:border-[#4ade80]"
+          className="w-full rounded-md bg-surface-card border border-border px-4 py-3 text-base focus:outline-none focus:border-accent"
         />
       </Field>
 
@@ -112,7 +124,7 @@ export function ProcedureForm({
           autoComplete="off"
           value={subType}
           onChange={(e) => setSubType(e.target.value)}
-          className="w-full rounded-md bg-[#0d1117] border border-[#1a2332] px-4 py-3 text-base focus:outline-none focus:border-[#4ade80]"
+          className="w-full rounded-md bg-surface-card border border-border px-4 py-3 text-base focus:outline-none focus:border-accent"
         />
       </Field>
 
@@ -130,8 +142,8 @@ export function ProcedureForm({
                 onClick={() => setIcon(emoji)}
                 className={`py-4 text-2xl rounded-md border ${
                   active
-                    ? 'border-[#4ade80] bg-[#052e16]'
-                    : 'border-[#1a2332] bg-[#0d1117]'
+                    ? 'border-accent bg-accent-dark'
+                    : 'border-border bg-surface-card'
                 }`}
                 aria-pressed={active}
               >
@@ -142,12 +154,12 @@ export function ProcedureForm({
         </div>
       </div>
 
-      {submitError && <p className="text-sm text-[#fb923c]">{submitError}</p>}
+      {submitError && <p className="text-sm text-flag">{submitError}</p>}
 
       <button
         type="submit"
         disabled={submitting || !name.trim()}
-        className="w-full rounded-md bg-[#4ade80] text-[#052e16] font-semibold py-3 disabled:opacity-50"
+        className="w-full rounded-md bg-accent text-accent-dark font-semibold py-3 disabled:opacity-50"
       >
         {submitting
           ? 'Saving…'
@@ -180,7 +192,7 @@ function Field({
         <span className="block text-xs text-white/40 mt-1">{hint}</span>
       )}
       {error && (
-        <span className="block text-xs text-[#fb923c] mt-1">{error}</span>
+        <span className="block text-xs text-flag mt-1">{error}</span>
       )}
     </label>
   )

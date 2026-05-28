@@ -27,7 +27,7 @@ export function OfflineBanner() {
     <div
       role="status"
       aria-live="polite"
-      className="sticky top-0 z-10 bg-[#1c0a00] border-b border-[#fb923c]/30 text-[#fb923c] text-sm text-center py-2 px-4"
+      className="sticky top-0 z-10 bg-flag-bg border-b border-flag/30 text-flag text-sm text-center py-2 px-4"
     >
       You&apos;re offline. Reconnect to save changes.
     </div>

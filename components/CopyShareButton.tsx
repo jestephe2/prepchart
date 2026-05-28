@@ -39,7 +39,7 @@ export function CopyShareButton({ token }: { token: string }) {
 
   if (alreadyCopied) {
     return (
-      <div className="rounded-md border border-[#1a2332] bg-[#0d1117] p-4 text-sm text-white/60">
+      <div className="rounded-md border border-border bg-surface-card p-4 text-sm text-white/60">
         Already copied to your account.
       </div>
     )
@@ -51,11 +51,11 @@ export function CopyShareButton({ token }: { token: string }) {
         type="button"
         onClick={copy}
         disabled={submitting}
-        className="w-full rounded-md bg-[#4ade80] text-[#052e16] font-semibold py-3 disabled:opacity-50"
+        className="w-full rounded-md bg-accent text-accent-dark font-semibold py-3 disabled:opacity-50"
       >
         {submitting ? 'Copying…' : 'Copy to my account'}
       </button>
-      {error && <p className="text-sm text-[#fb923c]">{error}</p>}
+      {error && <p className="text-sm text-flag">{error}</p>}
     </div>
   )
 }

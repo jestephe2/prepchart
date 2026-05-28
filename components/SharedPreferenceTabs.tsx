@@ -21,7 +21,7 @@ export function SharedPreferenceTabs({
 
   return (
     <>
-      <div role="tablist" className="flex border-b border-[#1a2332] mb-6">
+      <div role="tablist" className="flex border-b border-border mb-6">
         <TabButton active={tab === 'implants'} onClick={() => setTab('implants')}>
           Implants
         </TabButton>
@@ -80,7 +80,7 @@ function TabButton({
       onClick={onClick}
       className={`flex-1 py-3 text-sm font-medium border-b-2 -mb-px transition ${
         active
-          ? 'border-[#4ade80] text-[#4ade80]'
+          ? 'border-accent text-accent'
           : 'border-transparent text-white/60'
       }`}
     >
@@ -104,7 +104,7 @@ function ImplantSection({
         {title}
       </h3>
       {items.length === 0 ? (
-        <div className="rounded-md border border-[#1a2332] bg-[#0d1117] p-4 text-sm text-white/60">
+        <div className="rounded-md border border-border bg-surface-card p-4 text-sm text-white/60">
           {emptyText}
         </div>
       ) : (
@@ -112,7 +112,7 @@ function ImplantSection({
           {items.map((i) => (
             <li
               key={i.id}
-              className="rounded-md border border-[#1a2332] bg-[#0d1117] p-4"
+              className="rounded-md border border-border bg-surface-card p-4"
             >
               <div className="flex items-baseline justify-between gap-3">
                 <span className="font-medium">{i.implant_name}</span>
@@ -141,7 +141,7 @@ function NotesBlock({ title, text }: { title: string; text?: string | null }) {
       <h3 className="text-xs uppercase tracking-wide text-white/50 mb-2">
         {title}
       </h3>
-      <div className="rounded-md border border-[#1a2332] bg-[#0d1117] p-4 text-sm whitespace-pre-wrap">
+      <div className="rounded-md border border-border bg-surface-card p-4 text-sm whitespace-pre-wrap">
         {text?.trim() ? text : <span className="text-white/40">Not set.</span>}
       </div>
     </section>

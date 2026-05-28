@@ -28,7 +28,7 @@ export default async function SurgeonPage({
         </div>
 
         <header className="flex items-center gap-4 mb-8">
-          <div className="w-16 h-16 rounded-full bg-[#052e16] text-[#4ade80] flex items-center justify-center font-semibold text-lg shrink-0">
+          <div className="w-16 h-16 rounded-full bg-accent-dark text-accent flex items-center justify-center font-semibold text-lg shrink-0">
             {initials}
           </div>
           <div className="min-w-0">
@@ -48,7 +48,7 @@ export default async function SurgeonPage({
 
           <Link
             href={`/surgeons/${id}/procedures/new`}
-            className="mt-3 flex items-center justify-center gap-2 rounded-md border border-dashed border-[#1a2332] py-3 text-sm text-[#4ade80]"
+            className="mt-3 flex items-center justify-center gap-2 rounded-md border border-dashed border-border py-3 text-sm text-accent"
           >
             + Add procedure
           </Link>

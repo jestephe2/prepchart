@@ -17,7 +17,7 @@ export function LandingPage() {
 
 function Nav() {
   return (
-    <nav className="px-6 py-5 flex items-center justify-between border-b border-[#1a2332]">
+    <nav className="px-6 py-5 flex items-center justify-between border-b border-border">
       <span className="text-base font-semibold">CaseCard</span>
       <Link href="/login" className="text-sm text-white/70">
         Sign in
@@ -32,14 +32,14 @@ function Hero() {
       <h1 className="text-4xl sm:text-5xl font-semibold leading-tight tracking-tight">
         Your surgeon preferences.
         <br />
-        <span className="text-[#4ade80]">Always with you.</span>
+        <span className="text-accent">Always with you.</span>
       </h1>
       <p className="mt-5 text-base sm:text-lg text-white/70 max-w-md">
         Pull up any surgeon, any procedure, any implant — in two taps.
       </p>
       <Link
         href="/login"
-        className="mt-8 inline-block rounded-md bg-[#4ade80] text-[#052e16] font-semibold px-6 py-3 text-base"
+        className="mt-8 inline-block rounded-md bg-accent text-accent-dark font-semibold px-6 py-3 text-base"
       >
         Get started free
       </Link>
@@ -87,9 +87,9 @@ function HowItWorks() {
         {steps.map((s) => (
           <div
             key={s.n}
-            className="rounded-md border border-[#1a2332] bg-[#0d1117] p-5"
+            className="rounded-md border border-border bg-surface-card p-5"
           >
-            <div className="w-8 h-8 rounded-full bg-[#052e16] text-[#4ade80] flex items-center justify-center font-semibold text-sm mb-3">
+            <div className="w-8 h-8 rounded-full bg-accent-dark text-accent flex items-center justify-center font-semibold text-sm mb-3">
               {s.n}
             </div>
             <h3 className="text-base font-semibold mb-2">{s.title}</h3>
@@ -111,7 +111,7 @@ function Proof() {
 
 function CTAFooter() {
   return (
-    <section className="px-6 py-16 sm:py-20 border-t border-[#1a2332] bg-[#0d1117]">
+    <section className="px-6 py-16 sm:py-20 border-t border-border bg-surface-card">
       <div className="max-w-2xl mx-auto text-center">
         <h2 className="text-3xl sm:text-4xl font-semibold tracking-tight">
           Start with your next case.
@@ -121,7 +121,7 @@ function CTAFooter() {
         </p>
         <Link
           href="/login"
-          className="mt-7 inline-block rounded-md bg-[#4ade80] text-[#052e16] font-semibold px-6 py-3 text-base"
+          className="mt-7 inline-block rounded-md bg-accent text-accent-dark font-semibold px-6 py-3 text-base"
         >
           Get started free
         </Link>

@@ -24,7 +24,13 @@ export async function getUserProfile(
 export async function upsertUserProfile(
   supabase: SupabaseClient,
   userId: string,
-  patch: Partial<{ onboarding_complete: boolean }>
+  patch: Partial<{
+    onboarding_complete: boolean
+    stripe_customer_id: string | null
+    stripe_subscription_id: string | null
+    subscription_status: string | null
+    subscription_end: string | null
+  }>
 ): Promise<UserProfile> {
   const { data, error } = await supabase
     .from('user_profiles')
@@ -32,6 +38,36 @@ export async function upsertUserProfile(
     .select()
     .single()
   if (error) throw new Error(`upsertUserProfile failed: ${error.message}`)
+  return data
+}
+
+export async function getProfileByStripeCustomerId(
+  supabase: SupabaseClient,
+  customerId: string
+): Promise<UserProfile | null> {
+  const { data, error } = await supabase
+    .from('user_profiles')
+    .select('*')
+    .eq('stripe_customer_id', customerId)
+    .maybeSingle()
+  if (error)
+    throw new Error(`getProfileByStripeCustomerId failed: ${error.message}`)
+  return data
+}
+
+export async function getProfileByStripeSubscriptionId(
+  supabase: SupabaseClient,
+  subscriptionId: string
+): Promise<UserProfile | null> {
+  const { data, error } = await supabase
+    .from('user_profiles')
+    .select('*')
+    .eq('stripe_subscription_id', subscriptionId)
+    .maybeSingle()
+  if (error)
+    throw new Error(
+      `getProfileByStripeSubscriptionId failed: ${error.message}`
+    )
   return data
 }
 

@@ -34,7 +34,7 @@ export default async function ProcedurePage({
         </div>
 
         <header className="flex items-center gap-4 mb-6">
-          <div className="w-12 h-12 rounded-md bg-[#1a2332] flex items-center justify-center text-2xl shrink-0">
+          <div className="w-12 h-12 rounded-md bg-border flex items-center justify-center text-2xl shrink-0">
             {procedure.icon || '🔩'}
           </div>
           <div className="min-w-0 flex-1">
@@ -52,13 +52,13 @@ export default async function ProcedurePage({
         </header>
 
         {flags.length > 0 && (
-          <section className="mb-6 rounded-md border border-[#fb923c]/30 bg-[#1c0a00] p-4">
-            <h2 className="text-xs uppercase tracking-wide text-[#fb923c] mb-2">
+          <section className="mb-6 rounded-md border border-flag/30 bg-flag-bg p-4">
+            <h2 className="text-xs uppercase tracking-wide text-flag mb-2">
               Flags
             </h2>
             <ul className="space-y-1">
               {flags.map((f) => (
-                <li key={f.id} className="text-sm text-[#fb923c]">
+                <li key={f.id} className="text-sm text-flag">
                   {f.text}
                 </li>
               ))}

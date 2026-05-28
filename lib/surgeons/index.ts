@@ -5,6 +5,7 @@ import {
   updateSurgeon as updateSurgeonRow,
 } from '@/lib/data'
 import type { CreateSurgeonInput, Surgeon } from '@/lib/schemas'
+import { canAddSurgeon, CapReachedError } from '@/lib/subscriptions'
 
 export async function deleteSurgeon(
   supabase: SupabaseClient,
@@ -19,6 +20,9 @@ export async function createSurgeon(
   userId: string,
   input: CreateSurgeonInput
 ): Promise<Surgeon> {
+  if (!(await canAddSurgeon(supabase, userId))) {
+    throw new CapReachedError('surgeon')
+  }
   const initials = input.initials?.trim() || initialsFromName(input.name)
   return insertSurgeon(supabase, {
     user_id: userId,

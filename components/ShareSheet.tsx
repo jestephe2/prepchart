@@ -98,7 +98,7 @@ export function ShareSheet({
       aria-modal="true"
     >
       <div
-        className="w-full sm:max-w-md rounded-t-2xl sm:rounded-2xl border border-[#1a2332] bg-[#0d1117] p-6 space-y-4"
+        className="w-full sm:max-w-md rounded-t-2xl sm:rounded-2xl border border-border bg-surface-card p-6 space-y-4"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex items-center justify-between">
@@ -119,30 +119,30 @@ export function ShareSheet({
         </p>
 
         {loading && (
-          <div className="rounded-md border border-[#1a2332] bg-[#080b10] p-4 text-sm text-white/60">
+          <div className="rounded-md border border-border bg-surface-base p-4 text-sm text-white/60">
             Generating link…
           </div>
         )}
 
-        {error && <p className="text-sm text-[#fb923c]">{error}</p>}
+        {error && <p className="text-sm text-flag">{error}</p>}
 
         {url && (
           <>
-            <div className="rounded-md border border-[#1a2332] bg-[#080b10] p-3 text-xs font-mono text-white/80 break-all">
+            <div className="rounded-md border border-border bg-surface-base p-3 text-xs font-mono text-white/80 break-all">
               {url}
             </div>
             <div className="flex gap-2">
               <button
                 type="button"
                 onClick={copyLink}
-                className="flex-1 rounded-md border border-[#1a2332] py-3 text-sm font-medium text-white/90"
+                className="flex-1 rounded-md border border-border py-3 text-sm font-medium text-white/90"
               >
                 {copied ? 'Copied!' : 'Copy link'}
               </button>
               <button
                 type="button"
                 onClick={nativeShare}
-                className="flex-1 rounded-md bg-[#4ade80] text-[#052e16] font-semibold py-3 text-sm"
+                className="flex-1 rounded-md bg-accent text-accent-dark font-semibold py-3 text-sm"
               >
                 Share…
               </button>

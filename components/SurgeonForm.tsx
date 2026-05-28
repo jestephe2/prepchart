@@ -3,6 +3,7 @@
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { CreateSurgeonSchema } from '@/lib/schemas'
+import { UpgradePrompt } from '@/components/UpgradePrompt'
 
 const SPECIALTIES = [
   'Sports Medicine',
@@ -41,6 +42,7 @@ export function SurgeonForm({
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
   const [submitError, setSubmitError] = useState<string | null>(null)
   const [submitting, setSubmitting] = useState(false)
+  const [capReached, setCapReached] = useState(false)
 
   const effectiveInitials = initialsTouched ? initials : computeInitials(name)
 
@@ -76,6 +78,12 @@ export function SurgeonForm({
       body: JSON.stringify(parsed.data),
     })
 
+    if (res.status === 402) {
+      setSubmitting(false)
+      setCapReached(true)
+      return
+    }
+
     if (!res.ok) {
       setSubmitting(false)
       const body = await res.json().catch(() => null)
@@ -89,6 +97,10 @@ export function SurgeonForm({
     router.refresh()
   }
 
+  if (capReached) {
+    return <UpgradePrompt kind="surgeon" />
+  }
+
   return (
     <form onSubmit={handleSubmit} className="space-y-5">
       <Field label="Name" error={fieldErrors.name}>
@@ -100,7 +112,7 @@ export function SurgeonForm({
           value={name}
           onChange={(e) => setName(e.target.value)}
           placeholder="Dr. Sarah Chen"
-          className="w-full rounded-md bg-[#0d1117] border border-[#1a2332] px-4 py-3 text-base focus:outline-none focus:border-[#4ade80]"
+          className="w-full rounded-md bg-surface-card border border-border px-4 py-3 text-base focus:outline-none focus:border-accent"
         />
       </Field>
 
@@ -108,7 +120,7 @@ export function SurgeonForm({
         <select
           value={specialty}
           onChange={(e) => setSpecialty(e.target.value)}
-          className="w-full rounded-md bg-[#0d1117] border border-[#1a2332] px-4 py-3 text-base focus:outline-none focus:border-[#4ade80]"
+          className="w-full rounded-md bg-surface-card border border-border px-4 py-3 text-base focus:outline-none focus:border-accent"
         >
           <option value="">Select specialty</option>
           {SPECIALTIES.map((s) => (
@@ -126,7 +138,7 @@ export function SurgeonForm({
           value={hospital}
           onChange={(e) => setHospital(e.target.value)}
           placeholder="Sutter Medical Center"
-          className="w-full rounded-md bg-[#0d1117] border border-[#1a2332] px-4 py-3 text-base focus:outline-none focus:border-[#4ade80]"
+          className="w-full rounded-md bg-surface-card border border-border px-4 py-3 text-base focus:outline-none focus:border-accent"
         />
       </Field>
 
@@ -143,16 +155,16 @@ export function SurgeonForm({
             setInitialsTouched(true)
             setInitials(e.target.value.toUpperCase())
           }}
-          className="w-full rounded-md bg-[#0d1117] border border-[#1a2332] px-4 py-3 text-base focus:outline-none focus:border-[#4ade80]"
+          className="w-full rounded-md bg-surface-card border border-border px-4 py-3 text-base focus:outline-none focus:border-accent"
         />
       </Field>
 
-      {submitError && <p className="text-sm text-[#fb923c]">{submitError}</p>}
+      {submitError && <p className="text-sm text-flag">{submitError}</p>}
 
       <button
         type="submit"
         disabled={submitting || !name.trim()}
-        className="w-full rounded-md bg-[#4ade80] text-[#052e16] font-semibold py-3 disabled:opacity-50"
+        className="w-full rounded-md bg-accent text-accent-dark font-semibold py-3 disabled:opacity-50"
       >
         {submitting
           ? 'Saving…'
@@ -185,7 +197,7 @@ function Field({
         <span className="block text-xs text-white/40 mt-1">{hint}</span>
       )}
       {error && (
-        <span className="block text-xs text-[#fb923c] mt-1">{error}</span>
+        <span className="block text-xs text-flag mt-1">{error}</span>
       )}
     </label>
   )

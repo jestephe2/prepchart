@@ -14,7 +14,7 @@ export default function ErrorBoundary({
       </p>
       <button
         onClick={reset}
-        className="rounded-md bg-[#4ade80] text-[#052e16] font-semibold px-6 py-3"
+        className="rounded-md bg-accent text-accent-dark font-semibold px-6 py-3"
       >
         Try again
       </button>

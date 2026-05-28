@@ -3,6 +3,7 @@ import { z } from 'zod'
 import { createClient } from '@/lib/supabase/server'
 import { createProcedure } from '@/lib/procedures'
 import { CreateProcedureSchema } from '@/lib/schemas'
+import { CapReachedError } from '@/lib/subscriptions'
 
 const RequestSchema = CreateProcedureSchema.extend({
   surgeon_id: z.string().uuid(),
@@ -27,6 +28,16 @@ export async function POST(request: Request) {
   }
 
   const { surgeon_id, ...input } = result.data
-  const procedure = await createProcedure(supabase, surgeon_id, input)
-  return NextResponse.json(procedure, { status: 201 })
+  try {
+    const procedure = await createProcedure(supabase, surgeon_id, input)
+    return NextResponse.json(procedure, { status: 201 })
+  } catch (err) {
+    if (err instanceof CapReachedError) {
+      return NextResponse.json(
+        { error: 'cap_reached', kind: err.kind },
+        { status: 402 }
+      )
+    }
+    throw err
+  }
 }

@@ -42,7 +42,7 @@ export default async function SharePage({
       </header>
 
       <div className="flex items-center gap-4 mb-6">
-        <div className="w-12 h-12 rounded-md bg-[#1a2332] flex items-center justify-center text-2xl shrink-0">
+        <div className="w-12 h-12 rounded-md bg-border flex items-center justify-center text-2xl shrink-0">
           {procedure.icon || '🔩'}
         </div>
         <div className="min-w-0">
@@ -56,13 +56,13 @@ export default async function SharePage({
       </div>
 
       {flags.length > 0 && (
-        <section className="mb-6 rounded-md border border-[#fb923c]/30 bg-[#1c0a00] p-4">
-          <h2 className="text-xs uppercase tracking-wide text-[#fb923c] mb-2">
+        <section className="mb-6 rounded-md border border-flag/30 bg-flag-bg p-4">
+          <h2 className="text-xs uppercase tracking-wide text-flag mb-2">
             Flags
           </h2>
           <ul className="space-y-1">
             {flags.map((f) => (
-              <li key={f.id} className="text-sm text-[#fb923c]">
+              <li key={f.id} className="text-sm text-flag">
                 {f.text}
               </li>
             ))}
@@ -72,7 +72,7 @@ export default async function SharePage({
 
       <div className="mb-6">
         {isOwner ? (
-          <div className="rounded-md border border-[#1a2332] bg-[#0d1117] p-4 text-sm text-white/60">
+          <div className="rounded-md border border-border bg-surface-card p-4 text-sm text-white/60">
             You shared this card.
           </div>
         ) : user ? (
@@ -80,7 +80,7 @@ export default async function SharePage({
         ) : (
           <Link
             href={loginRedirect}
-            className="block w-full rounded-md bg-[#4ade80] text-[#052e16] font-semibold py-3 text-center"
+            className="block w-full rounded-md bg-accent text-accent-dark font-semibold py-3 text-center"
           >
             Sign in to copy
           </Link>

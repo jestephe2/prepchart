@@ -77,19 +77,19 @@ export function FirstImplantForm({
           value={implantName}
           onChange={(e) => setImplantName(e.target.value)}
           placeholder="e.g. Arthrex TightRope"
-          className="w-full rounded-md bg-[#0d1117] border border-[#1a2332] px-4 py-3 text-base focus:outline-none focus:border-[#4ade80]"
+          className="w-full rounded-md bg-surface-card border border-border px-4 py-3 text-base focus:outline-none focus:border-accent"
         />
         <span className="block text-xs text-white/40 mt-1">
           You can add bail-outs, part numbers, and notes after.
         </span>
       </label>
 
-      {error && <p className="text-sm text-[#fb923c]">{error}</p>}
+      {error && <p className="text-sm text-flag">{error}</p>}
 
       <button
         type="submit"
         disabled={submitting || !implantName.trim()}
-        className="w-full rounded-md bg-[#4ade80] text-[#052e16] font-semibold py-3 disabled:opacity-50"
+        className="w-full rounded-md bg-accent text-accent-dark font-semibold py-3 disabled:opacity-50"
       >
         {submitting ? 'Finishing…' : 'Finish'}
       </button>

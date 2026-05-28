@@ -19,7 +19,7 @@ export function PreferenceTabs({
 
   return (
     <>
-      <div role="tablist" className="flex border-b border-[#1a2332] mb-6">
+      <div role="tablist" className="flex border-b border-border mb-6">
         <TabButton active={tab === 'implants'} onClick={() => setTab('implants')}>
           Implants
         </TabButton>
@@ -151,14 +151,14 @@ function ImplantsTab({
           onAdd={() => addItem('Bail Out')}
         />
 
-        {error && <p className="text-sm text-[#fb923c]">{error}</p>}
+        {error && <p className="text-sm text-flag">{error}</p>}
 
         <div className="flex gap-2">
           <button
             type="button"
             onClick={cancel}
             disabled={submitting}
-            className="flex-1 rounded-md border border-[#1a2332] py-3 text-sm font-medium text-white/70"
+            className="flex-1 rounded-md border border-border py-3 text-sm font-medium text-white/70"
           >
             Cancel
           </button>
@@ -166,7 +166,7 @@ function ImplantsTab({
             type="button"
             onClick={save}
             disabled={submitting}
-            className="flex-1 rounded-md bg-[#4ade80] text-[#052e16] font-semibold py-3 disabled:opacity-50"
+            className="flex-1 rounded-md bg-accent text-accent-dark font-semibold py-3 disabled:opacity-50"
           >
             {submitting ? 'Saving…' : 'Save'}
           </button>
@@ -195,7 +195,7 @@ function ImplantsTab({
       <button
         type="button"
         onClick={startEditing}
-        className="w-full rounded-md border border-dashed border-[#1a2332] py-3 text-sm text-[#4ade80]"
+        className="w-full rounded-md border border-dashed border-border py-3 text-sm text-accent"
       >
         Edit implants
       </button>
@@ -233,7 +233,7 @@ function ImplantEditSection({
         <button
           type="button"
           onClick={onAdd}
-          className="w-full rounded-md border border-dashed border-[#1a2332] py-3 text-sm text-[#4ade80]"
+          className="w-full rounded-md border border-dashed border-border py-3 text-sm text-accent"
         >
           + Add {title === 'Bail Out' ? 'bail out' : 'preferred'}
         </button>
@@ -252,14 +252,14 @@ function ImplantEditCard({
   onRemove: () => void
 }) {
   return (
-    <div className="rounded-md border border-[#1a2332] bg-[#0d1117] p-4 space-y-3">
+    <div className="rounded-md border border-border bg-surface-card p-4 space-y-3">
       <div className="flex items-start gap-2">
         <select
           value={item.preference_type}
           onChange={(e) =>
             onUpdate({ preference_type: e.target.value as PreferenceType })
           }
-          className="flex-1 rounded-md bg-[#080b10] border border-[#1a2332] px-3 py-2 text-base focus:outline-none focus:border-[#4ade80]"
+          className="flex-1 rounded-md bg-surface-base border border-border px-3 py-2 text-base focus:outline-none focus:border-accent"
         >
           <option value="Implant Preference">Implant Preference</option>
           <option value="Bail Out">Bail Out</option>
@@ -268,7 +268,7 @@ function ImplantEditCard({
           type="button"
           onClick={onRemove}
           aria-label="Remove implant"
-          className="rounded-md border border-[#1a2332] px-3 py-2 text-base text-white/60"
+          className="rounded-md border border-border px-3 py-2 text-base text-white/60"
         >
           ×
         </button>
@@ -279,7 +279,7 @@ function ImplantEditCard({
         value={item.implant_name}
         onChange={(e) => onUpdate({ implant_name: e.target.value })}
         placeholder="Implant name"
-        className="w-full rounded-md bg-[#080b10] border border-[#1a2332] px-3 py-2 text-base focus:outline-none focus:border-[#4ade80]"
+        className="w-full rounded-md bg-surface-base border border-border px-3 py-2 text-base focus:outline-none focus:border-accent"
       />
 
       <input
@@ -287,7 +287,7 @@ function ImplantEditCard({
         value={item.part_number}
         onChange={(e) => onUpdate({ part_number: e.target.value })}
         placeholder="Part # (optional)"
-        className="w-full rounded-md bg-[#080b10] border border-[#1a2332] px-3 py-2 text-base focus:outline-none focus:border-[#4ade80]"
+        className="w-full rounded-md bg-surface-base border border-border px-3 py-2 text-base focus:outline-none focus:border-accent"
       />
 
       <textarea
@@ -295,7 +295,7 @@ function ImplantEditCard({
         onChange={(e) => onUpdate({ detail_notes: e.target.value })}
         rows={2}
         placeholder="Notes (sizing, rationale…)"
-        className="w-full rounded-md bg-[#080b10] border border-[#1a2332] px-3 py-2 text-base focus:outline-none focus:border-[#4ade80]"
+        className="w-full rounded-md bg-surface-base border border-border px-3 py-2 text-base focus:outline-none focus:border-accent"
       />
     </div>
   )
@@ -363,7 +363,7 @@ function SetupTab({ procedure }: { procedure: Procedure }) {
             onChange={(e) => setSetup(e.target.value)}
             rows={4}
             placeholder="Patient positioning, table setup, equipment notes…"
-            className="w-full rounded-md bg-[#0d1117] border border-[#1a2332] px-4 py-3 text-base focus:outline-none focus:border-[#4ade80]"
+            className="w-full rounded-md bg-surface-card border border-border px-4 py-3 text-base focus:outline-none focus:border-accent"
           />
         </EditField>
         <EditField label="Case Breakdown">
@@ -372,18 +372,18 @@ function SetupTab({ procedure }: { procedure: Procedure }) {
             onChange={(e) => setTiming(e.target.value)}
             rows={4}
             placeholder="Steps, when to have implants ready, key transitions…"
-            className="w-full rounded-md bg-[#0d1117] border border-[#1a2332] px-4 py-3 text-base focus:outline-none focus:border-[#4ade80]"
+            className="w-full rounded-md bg-surface-card border border-border px-4 py-3 text-base focus:outline-none focus:border-accent"
           />
         </EditField>
 
-        {error && <p className="text-sm text-[#fb923c]">{error}</p>}
+        {error && <p className="text-sm text-flag">{error}</p>}
 
         <div className="flex gap-2">
           <button
             type="button"
             onClick={cancel}
             disabled={submitting}
-            className="flex-1 rounded-md border border-[#1a2332] py-3 text-sm font-medium text-white/70"
+            className="flex-1 rounded-md border border-border py-3 text-sm font-medium text-white/70"
           >
             Cancel
           </button>
@@ -391,7 +391,7 @@ function SetupTab({ procedure }: { procedure: Procedure }) {
             type="button"
             onClick={save}
             disabled={submitting}
-            className="flex-1 rounded-md bg-[#4ade80] text-[#052e16] font-semibold py-3 disabled:opacity-50"
+            className="flex-1 rounded-md bg-accent text-accent-dark font-semibold py-3 disabled:opacity-50"
           >
             {submitting ? 'Saving…' : 'Save'}
           </button>
@@ -407,7 +407,7 @@ function SetupTab({ procedure }: { procedure: Procedure }) {
       <button
         type="button"
         onClick={startEditing}
-        className="w-full rounded-md border border-dashed border-[#1a2332] py-3 text-sm text-[#4ade80]"
+        className="w-full rounded-md border border-dashed border-border py-3 text-sm text-accent"
       >
         Edit setup
       </button>
@@ -486,7 +486,7 @@ function NotesTab({ procedure, flags }: { procedure: Procedure; flags: Flag[] })
             onChange={(e) => setRepNotes(e.target.value)}
             rows={6}
             placeholder="Tribal knowledge about this surgeon for this procedure…"
-            className="w-full rounded-md bg-[#0d1117] border border-[#1a2332] px-4 py-3 text-base focus:outline-none focus:border-[#4ade80]"
+            className="w-full rounded-md bg-surface-card border border-border px-4 py-3 text-base focus:outline-none focus:border-accent"
           />
         </EditField>
 
@@ -501,11 +501,11 @@ function NotesTab({ procedure, flags }: { procedure: Procedure; flags: Flag[] })
                   <button
                     type="button"
                     onClick={() => removeFlag(idx)}
-                    className="inline-flex items-center gap-2 rounded-full border border-[#fb923c]/40 bg-[#1c0a00] px-3 py-1.5 text-sm text-[#fb923c]"
+                    className="inline-flex items-center gap-2 rounded-full border border-flag/40 bg-flag-bg px-3 py-1.5 text-sm text-flag"
                     aria-label={`Remove flag: ${text}`}
                   >
                     <span>{text}</span>
-                    <span className="text-[#fb923c]/70">×</span>
+                    <span className="text-flag/70">×</span>
                   </button>
                 </li>
               ))}
@@ -523,27 +523,27 @@ function NotesTab({ procedure, flags }: { procedure: Procedure; flags: Flag[] })
                 }
               }}
               placeholder="Add a flag (e.g. confirm graft size)"
-              className="flex-1 rounded-md bg-[#0d1117] border border-[#1a2332] px-4 py-3 text-base focus:outline-none focus:border-[#4ade80]"
+              className="flex-1 rounded-md bg-surface-card border border-border px-4 py-3 text-base focus:outline-none focus:border-accent"
             />
             <button
               type="button"
               onClick={addFlag}
               disabled={!newFlag.trim()}
-              className="rounded-md border border-[#1a2332] px-4 text-sm text-[#4ade80] disabled:opacity-40"
+              className="rounded-md border border-border px-4 text-sm text-accent disabled:opacity-40"
             >
               + Add
             </button>
           </div>
         </div>
 
-        {error && <p className="text-sm text-[#fb923c]">{error}</p>}
+        {error && <p className="text-sm text-flag">{error}</p>}
 
         <div className="flex gap-2">
           <button
             type="button"
             onClick={cancel}
             disabled={submitting}
-            className="flex-1 rounded-md border border-[#1a2332] py-3 text-sm font-medium text-white/70"
+            className="flex-1 rounded-md border border-border py-3 text-sm font-medium text-white/70"
           >
             Cancel
           </button>
@@ -551,7 +551,7 @@ function NotesTab({ procedure, flags }: { procedure: Procedure; flags: Flag[] })
             type="button"
             onClick={save}
             disabled={submitting}
-            className="flex-1 rounded-md bg-[#4ade80] text-[#052e16] font-semibold py-3 disabled:opacity-50"
+            className="flex-1 rounded-md bg-accent text-accent-dark font-semibold py-3 disabled:opacity-50"
           >
             {submitting ? 'Saving…' : 'Save'}
           </button>
@@ -566,7 +566,7 @@ function NotesTab({ procedure, flags }: { procedure: Procedure; flags: Flag[] })
       <button
         type="button"
         onClick={startEditing}
-        className="w-full rounded-md border border-dashed border-[#1a2332] py-3 text-sm text-[#4ade80]"
+        className="w-full rounded-md border border-dashed border-border py-3 text-sm text-accent"
       >
         Edit notes &amp; flags
       </button>
@@ -607,7 +607,7 @@ function TabButton({
       onClick={onClick}
       className={`flex-1 py-3 text-sm font-medium border-b-2 -mb-px transition ${
         active
-          ? 'border-[#4ade80] text-[#4ade80]'
+          ? 'border-accent text-accent'
           : 'border-transparent text-white/60'
       }`}
     >
@@ -631,7 +631,7 @@ function ImplantSection({
         {title}
       </h3>
       {items.length === 0 ? (
-        <div className="rounded-md border border-[#1a2332] bg-[#0d1117] p-4 text-sm text-white/60">
+        <div className="rounded-md border border-border bg-surface-card p-4 text-sm text-white/60">
           {emptyText}
         </div>
       ) : (
@@ -639,7 +639,7 @@ function ImplantSection({
           {items.map((i) => (
             <li
               key={i.id}
-              className="rounded-md border border-[#1a2332] bg-[#0d1117] p-4"
+              className="rounded-md border border-border bg-surface-card p-4"
             >
               <div className="flex items-baseline justify-between gap-3">
                 <span className="font-medium">{i.implant_name}</span>
@@ -668,7 +668,7 @@ function NotesBlock({ title, text }: { title: string; text?: string | null }) {
       <h3 className="text-xs uppercase tracking-wide text-white/50 mb-2">
         {title}
       </h3>
-      <div className="rounded-md border border-[#1a2332] bg-[#0d1117] p-4 text-sm whitespace-pre-wrap">
+      <div className="rounded-md border border-border bg-surface-card p-4 text-sm whitespace-pre-wrap">
         {text?.trim() ? text : <span className="text-white/40">Not set.</span>}
       </div>
     </section>

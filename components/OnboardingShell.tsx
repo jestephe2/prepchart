@@ -39,10 +39,10 @@ export function OnboardingShell({
               key={n}
               className={`h-1.5 rounded-full transition-all ${
                 n === step
-                  ? 'w-10 bg-[#4ade80]'
+                  ? 'w-10 bg-accent'
                   : n < step
-                  ? 'w-6 bg-[#4ade80]/40'
-                  : 'w-6 bg-[#1a2332]'
+                  ? 'w-6 bg-accent/40'
+                  : 'w-6 bg-border'
               }`}
             />
           ))}

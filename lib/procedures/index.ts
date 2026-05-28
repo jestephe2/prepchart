@@ -9,6 +9,7 @@ import type {
   Procedure,
   UpdateProcedureInput,
 } from '@/lib/schemas'
+import { canAddProcedure, CapReachedError } from '@/lib/subscriptions'
 
 export async function deleteProcedure(
   supabase: SupabaseClient,
@@ -23,6 +24,9 @@ export async function createProcedure(
   surgeonId: string,
   input: CreateProcedureInput
 ): Promise<Procedure> {
+  if (!(await canAddProcedure(supabase, surgeonId))) {
+    throw new CapReachedError('procedure')
+  }
   return insertProcedure(supabase, {
     surgeon_id: surgeonId,
     name: input.name.trim(),
