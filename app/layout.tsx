@@ -14,7 +14,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "PrefChart",
+  title: "CaseCard",
   description: "Your surgeon preferences. Always with you.",
 };
 

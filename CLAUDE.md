@@ -1,4 +1,4 @@
-# PrefChart — Claude Code Context
+# CaseCard — Claude Code Context
 
 ## What This Is
 Mobile-first PWA for surgical device reps. Core flow: Surgeon → Procedure → Preference Card.
@@ -292,7 +292,7 @@ Use Supabase magic link auth. No passwords for V1.
 - Middleware to protect all routes except `/login`
 - Redirect authenticated users to `/` from login page
 
-Keep the login screen simple: PrefChart logo, one email field, one button. Dark theme matching the app. No social auth, no passwords.
+Keep the login screen simple: CaseCard logo, one email field, one button. Dark theme matching the app. No social auth, no passwords.
 
 -----
 
@@ -436,7 +436,7 @@ Before calling Phase 1 done, do this checklist on your actual iPhone:
 - [ ] Back navigation works correctly
 - [ ] Preference card loads in under 2 seconds on LTE
 
-**Phase 1 Done When:** You walk into your next case, pull up PrefChart on your phone in the parking lot, tap your surgeon, tap the procedure, and see your real preference card. That’s the tracer bullet hitting the target.
+**Phase 1 Done When:** You walk into your next case, pull up CaseCard on your phone in the parking lot, tap your surgeon, tap the procedure, and see your real preference card. That’s the tracer bullet hitting the target.
 
 -----
 
@@ -569,7 +569,7 @@ Every data operation needs a real error state before Phase 2 is done:
 |Free|$0    |2 surgeons, 3 procedures each. No upgrade nagging — just natural limit.|
 |Pro |$15/mo|Unlimited surgeons, procedures, preferences                            |
 
-Free tier lowers signup friction. A rep fully evaluates PrefChart on 2 surgeons. When they want surgeon #3, they upgrade. No credit card required to start.
+Free tier lowers signup friction. A rep fully evaluates CaseCard on 2 surgeons. When they want surgeon #3, they upgrade. No credit card required to start.
 
 -----
 
@@ -628,7 +628,7 @@ Gate “Add Surgeon” after 2 surgeons for free users: show upgrade prompt, not
 
 New user signs up → 3-step onboarding before they hit the home screen:
 
-**Step 1:** “Welcome to PrefChart. Let’s add your first surgeon.” → inline surgeon form (validated with Zod before submit)
+**Step 1:** “Welcome to CaseCard. Let’s add your first surgeon.” → inline surgeon form (validated with Zod before submit)
 **Step 2:** “Now add a procedure.” → inline procedure form
 **Step 3:** “Add your first preference.” → inline implant form with example placeholder
 
@@ -656,7 +656,7 @@ No testimonials yet. No social proof yet. Honest, direct, rep-to-rep language.
 
 ### 3.5 — Pre-Launch Checklist (1 hr)
 
-- [ ] Magic link email has PrefChart branding (not Supabase default)
+- [ ] Magic link email has CaseCard branding (not Supabase default)
 - [ ] PWA icon is high quality at all sizes
 - [ ] Stripe webhook is verified with signing secret
 - [ ] Idempotency working — test by sending duplicate Stripe events
@@ -703,11 +703,11 @@ Every one of these is a good idea. None of them should exist until someone is pa
 
 ## First Session With Claude Code
 
-When you open PrefChart in Claude Code for the first time, paste this as the starting context:
+When you open CaseCard in Claude Code for the first time, paste this as the starting context:
 
-> PrefChart is a mobile-first PWA for surgical device reps. Stack: Next.js App Router, TypeScript, Supabase, Tailwind, Zod. Colors: dark background #080b10, green accent #4ade80. Four core tables: surgeons, procedures, implant_preferences, flags. Plus processed_events for webhook idempotency. All Supabase queries live in /lib/data.ts only — never raw Supabase in components or API routes. All types derived from Zod schemas in /lib/schemas.ts — never write separate TypeScript interfaces for DB entities. API routes are humble: validate with Zod, call /lib domain function, return response. We are in Phase [X] of the build sequence. Today’s task is [specific task from this doc].
+> CaseCard is a mobile-first PWA for surgical device reps. Stack: Next.js App Router, TypeScript, Supabase, Tailwind, Zod. Colors: dark background #080b10, green accent #4ade80. Four core tables: surgeons, procedures, implant_preferences, flags. Plus processed_events for webhook idempotency. All Supabase queries live in /lib/data.ts only — never raw Supabase in components or API routes. All types derived from Zod schemas in /lib/schemas.ts — never write separate TypeScript interfaces for DB entities. API routes are humble: validate with Zod, call /lib domain function, return response. We are in Phase [X] of the build sequence. Today’s task is [specific task from this doc].
 
-Start each session with the specific task. Don’t start sessions with “let’s work on PrefChart” — start with “let’s build the Add Surgeon API route from Phase 2.1.”
+Start each session with the specific task. Don’t start sessions with “let’s work on CaseCard” — start with “let’s build the Add Surgeon API route from Phase 2.1.”
 
 -----
 
@@ -727,7 +727,7 @@ Run these checks at the end of each phase:
 
 ## Definition of Done — V1
 
-PrefChart V1 is done when:
+CaseCard V1 is done when:
 
 1. You have used it personally in at least 5 real OR cases
 1. At least 2 other reps have signed up independently and built their own profiles

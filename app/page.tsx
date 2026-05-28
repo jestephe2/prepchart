@@ -2,9 +2,18 @@ import Link from 'next/link'
 import { createClient } from '@/lib/supabase/server'
 import { getUpcomingSurgeons, getStats } from '@/lib/data'
 import { BottomNav } from '@/components/BottomNav'
+import { LandingPage } from '@/components/marketing/LandingPage'
 
 export default async function HomePage() {
   const supabase = await createClient()
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
+
+  if (!user) {
+    return <LandingPage />
+  }
+
   const [upcoming, stats] = await Promise.all([
     getUpcomingSurgeons(supabase),
     getStats(supabase),
@@ -14,7 +23,7 @@ export default async function HomePage() {
     <>
       <main className="flex-1 px-6 pt-12 pb-28">
         <header className="mb-10">
-          <p className="text-sm text-white/50 mb-2">PrefChart</p>
+          <p className="text-sm text-white/50 mb-2">CaseCard</p>
           <h1 className="text-3xl font-semibold leading-tight">
             What case are you walking into?
           </h1>

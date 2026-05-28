@@ -87,7 +87,7 @@ function LoginShell({ children }: { children?: React.ReactNode }) {
   return (
     <main className="min-h-screen flex items-center justify-center px-6 bg-[#080b10] text-white">
       <div className="w-full max-w-sm">
-        <h1 className="text-2xl font-semibold mb-2">PrefChart</h1>
+        <h1 className="text-2xl font-semibold mb-2">CaseCard</h1>
         <p className="text-sm text-white/60 mb-8">
           Sign in to your surgeon preferences.
         </p>

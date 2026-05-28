@@ -32,7 +32,7 @@ export function OnboardingShell({
   return (
     <main className="flex-1 px-6 pt-12 pb-12">
       <div className="mb-8">
-        <p className="text-sm text-white/50 mb-3">PrefChart</p>
+        <p className="text-sm text-white/50 mb-3">CaseCard</p>
         <div className="flex items-center gap-2" aria-label={`Step ${step} of 3`}>
           {[1, 2, 3].map((n) => (
             <span

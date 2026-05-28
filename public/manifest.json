@@ -1,6 +1,6 @@
 {
-  "name": "PrefChart",
-  "short_name": "PrefChart",
+  "name": "CaseCard",
+  "short_name": "CaseCard",
   "description": "Surgical preference cards for device reps",
   "start_url": "/",
   "display": "standalone",

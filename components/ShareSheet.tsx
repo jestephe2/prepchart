@@ -77,7 +77,7 @@ export function ShareSheet({
     if (typeof navigator.share === 'function') {
       try {
         await navigator.share({
-          title: `PrefChart — ${procedureName}`,
+          title: `CaseCard — ${procedureName}`,
           url,
         })
       } catch {
