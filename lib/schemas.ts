@@ -42,10 +42,20 @@ export const FlagSchema = z.object({
   created_at: z.string().optional(),
 })
 
+export const ShareSchema = z.object({
+  id: z.string().uuid(),
+  token: z.string().min(1),
+  procedure_id: z.string().uuid(),
+  created_by: z.string().uuid(),
+  created_at: z.string().optional(),
+  revoked_at: z.string().nullable().optional(),
+})
+
 export type Surgeon = z.infer<typeof SurgeonSchema>
 export type Procedure = z.infer<typeof ProcedureSchema>
 export type ImplantPreference = z.infer<typeof ImplantPreferenceSchema>
 export type Flag = z.infer<typeof FlagSchema>
+export type Share = z.infer<typeof ShareSchema>
 
 export const CreateSurgeonSchema = SurgeonSchema.pick({
   name: true,
@@ -84,7 +94,12 @@ export const ReplaceImplantsSchema = z.object({
   items: z.array(UpsertImplantSchema),
 })
 
+export const CreateShareSchema = z.object({
+  procedure_id: z.string().uuid(),
+})
+
 export type CreateSurgeonInput = z.infer<typeof CreateSurgeonSchema>
 export type CreateProcedureInput = z.infer<typeof CreateProcedureSchema>
 export type UpsertImplantInput = z.infer<typeof UpsertImplantSchema>
 export type UpdateProcedureInput = z.infer<typeof UpdateProcedureSchema>
+export type CreateShareInput = z.infer<typeof CreateShareSchema>

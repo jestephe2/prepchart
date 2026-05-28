@@ -1,5 +1,46 @@
 import { SupabaseClient } from '@supabase/supabase-js'
-import { Surgeon, Procedure, ImplantPreference, Flag } from './schemas'
+import { Surgeon, Procedure, ImplantPreference, Flag, Share } from './schemas'
+
+export async function insertShare(
+  supabase: SupabaseClient,
+  row: { token: string; procedure_id: string; created_by: string }
+): Promise<Share> {
+  const { data, error } = await supabase
+    .from('shares')
+    .insert(row)
+    .select()
+    .single()
+  if (error) throw new Error(`insertShare failed: ${error.message}`)
+  return data
+}
+
+export async function getActiveShareByProcedure(
+  supabase: SupabaseClient,
+  procedureId: string
+): Promise<Share | null> {
+  const { data, error } = await supabase
+    .from('shares')
+    .select('*')
+    .eq('procedure_id', procedureId)
+    .is('revoked_at', null)
+    .maybeSingle()
+  if (error) throw new Error(`getActiveShareByProcedure failed: ${error.message}`)
+  return data
+}
+
+export async function getActiveShareByToken(
+  supabase: SupabaseClient,
+  token: string
+): Promise<Share | null> {
+  const { data, error } = await supabase
+    .from('shares')
+    .select('*')
+    .eq('token', token)
+    .is('revoked_at', null)
+    .maybeSingle()
+  if (error) throw new Error(`getActiveShareByToken failed: ${error.message}`)
+  return data
+}
 
 export async function insertSurgeon(
   supabase: SupabaseClient,

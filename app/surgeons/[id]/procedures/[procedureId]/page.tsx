@@ -4,6 +4,7 @@ import { createClient } from '@/lib/supabase/server'
 import { getSurgeon, getProcedure, getPreferences } from '@/lib/data'
 import { BottomNav } from '@/components/BottomNav'
 import { PreferenceTabs } from '@/components/PreferenceTabs'
+import { ShareTrigger } from '@/components/ShareTrigger'
 
 export default async function ProcedurePage({
   params,
@@ -36,7 +37,7 @@ export default async function ProcedurePage({
           <div className="w-12 h-12 rounded-md bg-[#1a2332] flex items-center justify-center text-2xl shrink-0">
             {procedure.icon || '🔩'}
           </div>
-          <div className="min-w-0">
+          <div className="min-w-0 flex-1">
             <h1 className="text-xl font-semibold truncate">{procedure.name}</h1>
             {procedure.sub_type && (
               <p className="text-sm text-white/50 mt-0.5 truncate">
@@ -44,6 +45,10 @@ export default async function ProcedurePage({
               </p>
             )}
           </div>
+          <ShareTrigger
+            procedureId={procedure.id}
+            procedureName={procedure.name}
+          />
         </header>
 
         {flags.length > 0 && (

@@ -259,7 +259,7 @@ function ImplantEditCard({
           onChange={(e) =>
             onUpdate({ preference_type: e.target.value as PreferenceType })
           }
-          className="flex-1 rounded-md bg-[#080b10] border border-[#1a2332] px-3 py-2 text-sm focus:outline-none focus:border-[#4ade80]"
+          className="flex-1 rounded-md bg-[#080b10] border border-[#1a2332] px-3 py-2 text-base focus:outline-none focus:border-[#4ade80]"
         >
           <option value="Implant Preference">Implant Preference</option>
           <option value="Bail Out">Bail Out</option>
@@ -268,7 +268,7 @@ function ImplantEditCard({
           type="button"
           onClick={onRemove}
           aria-label="Remove implant"
-          className="rounded-md border border-[#1a2332] px-3 py-2 text-sm text-white/60"
+          className="rounded-md border border-[#1a2332] px-3 py-2 text-base text-white/60"
         >
           ×
         </button>
@@ -279,7 +279,7 @@ function ImplantEditCard({
         value={item.implant_name}
         onChange={(e) => onUpdate({ implant_name: e.target.value })}
         placeholder="Implant name"
-        className="w-full rounded-md bg-[#080b10] border border-[#1a2332] px-3 py-2 text-sm focus:outline-none focus:border-[#4ade80]"
+        className="w-full rounded-md bg-[#080b10] border border-[#1a2332] px-3 py-2 text-base focus:outline-none focus:border-[#4ade80]"
       />
 
       <input
@@ -287,7 +287,7 @@ function ImplantEditCard({
         value={item.part_number}
         onChange={(e) => onUpdate({ part_number: e.target.value })}
         placeholder="Part # (optional)"
-        className="w-full rounded-md bg-[#080b10] border border-[#1a2332] px-3 py-2 text-sm focus:outline-none focus:border-[#4ade80]"
+        className="w-full rounded-md bg-[#080b10] border border-[#1a2332] px-3 py-2 text-base focus:outline-none focus:border-[#4ade80]"
       />
 
       <textarea
@@ -295,7 +295,7 @@ function ImplantEditCard({
         onChange={(e) => onUpdate({ detail_notes: e.target.value })}
         rows={2}
         placeholder="Notes (sizing, rationale…)"
-        className="w-full rounded-md bg-[#080b10] border border-[#1a2332] px-3 py-2 text-sm focus:outline-none focus:border-[#4ade80]"
+        className="w-full rounded-md bg-[#080b10] border border-[#1a2332] px-3 py-2 text-base focus:outline-none focus:border-[#4ade80]"
       />
     </div>
   )
@@ -366,12 +366,12 @@ function SetupTab({ procedure }: { procedure: Procedure }) {
             className="w-full rounded-md bg-[#0d1117] border border-[#1a2332] px-4 py-3 text-base focus:outline-none focus:border-[#4ade80]"
           />
         </EditField>
-        <EditField label="Timing">
+        <EditField label="Case Breakdown">
           <textarea
             value={timing}
             onChange={(e) => setTiming(e.target.value)}
             rows={4}
-            placeholder="When to scrub in, what to have ready by which step…"
+            placeholder="Steps, when to have implants ready, key transitions…"
             className="w-full rounded-md bg-[#0d1117] border border-[#1a2332] px-4 py-3 text-base focus:outline-none focus:border-[#4ade80]"
           />
         </EditField>
@@ -403,7 +403,7 @@ function SetupTab({ procedure }: { procedure: Procedure }) {
   return (
     <div className="space-y-4">
       <NotesBlock title="OR Setup" text={procedure.setup_notes} />
-      <NotesBlock title="Timing" text={procedure.timing_notes} />
+      <NotesBlock title="Case Breakdown" text={procedure.timing_notes} />
       <button
         type="button"
         onClick={startEditing}

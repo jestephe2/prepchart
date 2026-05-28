@@ -1,9 +1,12 @@
 'use client'
 
+import { useSearchParams } from 'next/navigation'
 import { useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
 
 export default function LoginPage() {
+  const searchParams = useSearchParams()
+  const redirect = searchParams.get('redirect') ?? '/'
   const [email, setEmail] = useState('')
   const [status, setStatus] = useState<'idle' | 'sending' | 'sent' | 'error'>('idle')
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
@@ -13,11 +16,12 @@ export default function LoginPage() {
     setStatus('sending')
     setErrorMessage(null)
 
+    const callback = `${window.location.origin}/auth/callback?next=${encodeURIComponent(redirect)}`
     const supabase = createClient()
     const { error } = await supabase.auth.signInWithOtp({
       email,
       options: {
-        emailRedirectTo: `${window.location.origin}/auth/callback`,
+        emailRedirectTo: callback,
       },
     })
 
