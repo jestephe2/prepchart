@@ -23,7 +23,9 @@ export async function POST(request: Request) {
 
   const share = await createShare(supabase, user.id, result.data.procedure_id)
 
-  const origin = new URL(request.url).origin
+  const origin =
+    process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, '') ??
+    new URL(request.url).origin
   return NextResponse.json(
     { token: share.token, url: `${origin}/share/${share.token}` },
     { status: 201 }
