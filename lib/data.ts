@@ -1,5 +1,39 @@
 import { SupabaseClient } from '@supabase/supabase-js'
-import { Surgeon, Procedure, ImplantPreference, Flag, Share } from './schemas'
+import {
+  Surgeon,
+  Procedure,
+  ImplantPreference,
+  Flag,
+  Share,
+  UserProfile,
+} from './schemas'
+
+export async function getUserProfile(
+  supabase: SupabaseClient,
+  userId: string
+): Promise<UserProfile | null> {
+  const { data, error } = await supabase
+    .from('user_profiles')
+    .select('*')
+    .eq('user_id', userId)
+    .maybeSingle()
+  if (error) throw new Error(`getUserProfile failed: ${error.message}`)
+  return data
+}
+
+export async function upsertUserProfile(
+  supabase: SupabaseClient,
+  userId: string,
+  patch: Partial<{ onboarding_complete: boolean }>
+): Promise<UserProfile> {
+  const { data, error } = await supabase
+    .from('user_profiles')
+    .upsert({ user_id: userId, ...patch }, { onConflict: 'user_id' })
+    .select()
+    .single()
+  if (error) throw new Error(`upsertUserProfile failed: ${error.message}`)
+  return data
+}
 
 export async function insertShare(
   supabase: SupabaseClient,

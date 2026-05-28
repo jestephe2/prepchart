@@ -51,11 +51,18 @@ export const ShareSchema = z.object({
   revoked_at: z.string().nullable().optional(),
 })
 
+export const UserProfileSchema = z.object({
+  user_id: z.string().uuid(),
+  onboarding_complete: z.boolean(),
+  created_at: z.string().optional(),
+})
+
 export type Surgeon = z.infer<typeof SurgeonSchema>
 export type Procedure = z.infer<typeof ProcedureSchema>
 export type ImplantPreference = z.infer<typeof ImplantPreferenceSchema>
 export type Flag = z.infer<typeof FlagSchema>
 export type Share = z.infer<typeof ShareSchema>
+export type UserProfile = z.infer<typeof UserProfileSchema>
 
 export const CreateSurgeonSchema = SurgeonSchema.pick({
   name: true,

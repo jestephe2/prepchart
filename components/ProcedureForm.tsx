@@ -17,11 +17,13 @@ export function ProcedureForm({
   surgeonId,
   procedureId,
   initial,
+  redirectTo,
 }: {
   mode: 'create' | 'edit'
   surgeonId: string
   procedureId?: string
   initial?: ProcedureFormInitial
+  redirectTo?: (newId: string) => string
 }) {
   const router = useRouter()
   const [name, setName] = useState(initial?.name ?? '')
@@ -78,7 +80,10 @@ export function ProcedureForm({
     }
 
     const procedure = await res.json()
-    router.push(`/surgeons/${surgeonId}/procedures/${procedure.id}`)
+    const target = redirectTo
+      ? redirectTo(procedure.id)
+      : `/surgeons/${surgeonId}/procedures/${procedure.id}`
+    router.push(target)
     router.refresh()
   }
 

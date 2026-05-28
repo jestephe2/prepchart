@@ -23,10 +23,12 @@ export function SurgeonForm({
   mode,
   surgeonId,
   initial,
+  redirectTo,
 }: {
   mode: 'create' | 'edit'
   surgeonId?: string
   initial?: SurgeonFormInitial
+  redirectTo?: (newId: string) => string
 }) {
   const router = useRouter()
   const [name, setName] = useState(initial?.name ?? '')
@@ -82,7 +84,8 @@ export function SurgeonForm({
     }
 
     const surgeon = await res.json()
-    router.push(`/surgeons/${surgeon.id}`)
+    const target = redirectTo ? redirectTo(surgeon.id) : `/surgeons/${surgeon.id}`
+    router.push(target)
     router.refresh()
   }
 
