@@ -161,6 +161,7 @@ export async function insertProcedure(
     name: string
     sub_type?: string | null
     icon?: string
+    source_share_token?: string | null
   }
 ): Promise<Procedure> {
   const { data, error } = await supabase
@@ -169,6 +170,20 @@ export async function insertProcedure(
     .select()
     .single()
   if (error) throw new Error(`insertProcedure failed: ${error.message}`)
+  return data
+}
+
+export async function getProcedureBySourceToken(
+  supabase: SupabaseClient,
+  token: string
+): Promise<{ surgeon_id: string; id: string } | null> {
+  const { data, error } = await supabase
+    .from('procedures')
+    .select('id, surgeon_id')
+    .eq('source_share_token', token)
+    .maybeSingle()
+  if (error)
+    throw new Error(`getProcedureBySourceToken failed: ${error.message}`)
   return data
 }
 
@@ -290,6 +305,48 @@ export async function getProcedure(
     .maybeSingle()
   if (error) throw new Error(`getProcedure failed: ${error.message}`)
   return data
+}
+
+export async function getMostRecentSurgeon(
+  supabase: SupabaseClient
+): Promise<Surgeon | null> {
+  const { data, error } = await supabase
+    .from('surgeons')
+    .select('*')
+    .order('created_at', { ascending: false })
+    .limit(1)
+    .maybeSingle()
+  if (error) throw new Error(`getMostRecentSurgeon failed: ${error.message}`)
+  return data
+}
+
+export async function getMostRecentProcedureForSurgeon(
+  supabase: SupabaseClient,
+  surgeonId: string
+): Promise<Procedure | null> {
+  const { data, error } = await supabase
+    .from('procedures')
+    .select('*')
+    .eq('surgeon_id', surgeonId)
+    .order('created_at', { ascending: false })
+    .limit(1)
+    .maybeSingle()
+  if (error)
+    throw new Error(`getMostRecentProcedureForSurgeon failed: ${error.message}`)
+  return data
+}
+
+export async function getImplantCountForProcedure(
+  supabase: SupabaseClient,
+  procedureId: string
+): Promise<number> {
+  const { count, error } = await supabase
+    .from('implant_preferences')
+    .select('*', { count: 'exact', head: true })
+    .eq('procedure_id', procedureId)
+  if (error)
+    throw new Error(`getImplantCountForProcedure failed: ${error.message}`)
+  return count ?? 0
 }
 
 export async function insertImplants(

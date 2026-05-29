@@ -114,8 +114,8 @@ export function ShareSheet({
         </div>
 
         <p className="text-sm text-white/60">
-          Anyone with this link can view this card. They can also sign in and
-          copy it to their own account.
+          Anyone with this link can view this card. They can sign in to save a
+          copy to their own account.
         </p>
 
         {loading && (

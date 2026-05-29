@@ -1,7 +1,6 @@
 import { NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { createServiceClient } from '@/lib/supabase/service'
-// TODO(2026-06): make copy idempotent server-side via a source_share_token column on procedures
 import { copyShareToUser } from '@/lib/shares'
 
 export async function POST(

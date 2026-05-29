@@ -1,32 +1,27 @@
-'use client'
-
-import { redirect, useSearchParams } from 'next/navigation'
-import { Suspense } from 'react'
+import { redirect } from 'next/navigation'
 import { OnboardingShell } from '@/components/OnboardingShell'
 import { ProcedureForm } from '@/components/ProcedureForm'
+import { createClient } from '@/lib/supabase/server'
+import { gotoOnboardingStep } from '@/lib/onboarding'
 
-export default function WelcomeProcedurePage() {
-  return (
-    <Suspense fallback={null}>
-      <Inner />
-    </Suspense>
-  )
-}
+export default async function WelcomeProcedurePage() {
+  const supabase = await createClient()
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
+  if (!user) redirect('/login?redirect=/welcome/procedure')
 
-function Inner() {
-  const searchParams = useSearchParams()
-  const surgeonId = searchParams.get('surgeon')
-  if (!surgeonId) {
-    redirect('/welcome/surgeon')
-  }
+  const state = await gotoOnboardingStep(supabase, user.id, 2)
+  // gotoOnboardingStep only returns when state.step matches expected.
+  if (state.step !== 2) redirect('/welcome/surgeon')
 
   return (
     <OnboardingShell step={2} title="Add your first procedure">
       <ProcedureForm
         mode="create"
-        surgeonId={surgeonId}
+        surgeonId={state.surgeonId}
         redirectTo={(procId) =>
-          `/welcome/implant?surgeon=${surgeonId}&procedure=${procId}`
+          `/welcome/implant?surgeon=${state.surgeonId}&procedure=${procId}`
         }
       />
     </OnboardingShell>

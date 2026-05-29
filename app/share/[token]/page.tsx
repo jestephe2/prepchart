@@ -1,9 +1,8 @@
 import Link from 'next/link'
-import { notFound } from 'next/navigation'
+import { notFound, redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import { createServiceClient } from '@/lib/supabase/service'
 import { getSharedCard } from '@/lib/shares'
-import { CopyShareButton } from '@/components/CopyShareButton'
 import { SharedPreferenceTabs } from '@/components/SharedPreferenceTabs'
 
 export default async function SharePage({
@@ -25,7 +24,15 @@ export default async function SharePage({
   } = await userSupabase.auth.getUser()
 
   const isOwner = user?.id === share.created_by
-  const loginRedirect = `/login?redirect=${encodeURIComponent(`/share/${token}`)}`
+  const claimHref = `/share/${token}/claim`
+  const loginRedirect = `/login?redirect=${encodeURIComponent(claimHref)}`
+
+  // Signed-in non-owner: clicking the share link IS the intent to save.
+  // Skip the preview and send them straight through the claim flow,
+  // which handles idempotency (re-visits land on their existing copy).
+  if (user && !isOwner) {
+    redirect(claimHref)
+  }
 
   return (
     <main className="flex-1 px-6 pt-8 pb-12">
@@ -75,14 +82,12 @@ export default async function SharePage({
           <div className="rounded-md border border-border bg-surface-card p-4 text-sm text-white/60">
             You shared this card.
           </div>
-        ) : user ? (
-          <CopyShareButton token={token} />
         ) : (
           <Link
             href={loginRedirect}
             className="block w-full rounded-md bg-accent text-accent-dark font-semibold py-3 text-center"
           >
-            Sign in to copy
+            Create a free account to save/edit
           </Link>
         )}
       </div>

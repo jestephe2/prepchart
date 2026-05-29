@@ -4,6 +4,7 @@ import {
   getActiveShareByToken,
   getPreferences,
   getProcedure,
+  getProcedureBySourceToken,
   getSurgeon,
   insertFlags,
   insertImplants,
@@ -63,6 +64,11 @@ export async function copyShareToUser(
     throw new Error('Share not found or revoked')
   }
 
+  const existing = await getProcedureBySourceToken(userSupabase, token)
+  if (existing) {
+    return { surgeonId: existing.surgeon_id, procedureId: existing.id }
+  }
+
   const { surgeon, procedure, implants, flags } = source
 
   const newSurgeon = await insertSurgeon(userSupabase, {
@@ -78,6 +84,7 @@ export async function copyShareToUser(
     name: procedure.name,
     sub_type: procedure.sub_type ?? null,
     icon: procedure.icon || '🔩',
+    source_share_token: token,
   })
 
   // Carry the long-form notes over via an update — insertProcedure intentionally

@@ -20,6 +20,7 @@ export const ProcedureSchema = z.object({
   setup_notes: z.string().optional().nullable(),
   timing_notes: z.string().optional().nullable(),
   rep_notes: z.string().optional().nullable(),
+  source_share_token: z.string().nullable().optional(),
   created_at: z.string().optional(),
 })
 

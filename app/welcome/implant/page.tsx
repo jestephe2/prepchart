@@ -1,29 +1,25 @@
-'use client'
-
-import { redirect, useSearchParams } from 'next/navigation'
-import { Suspense } from 'react'
+import { redirect } from 'next/navigation'
 import { FirstImplantForm } from '@/components/FirstImplantForm'
 import { OnboardingShell } from '@/components/OnboardingShell'
+import { createClient } from '@/lib/supabase/server'
+import { gotoOnboardingStep } from '@/lib/onboarding'
 
-export default function WelcomeImplantPage() {
-  return (
-    <Suspense fallback={null}>
-      <Inner />
-    </Suspense>
-  )
-}
+export default async function WelcomeImplantPage() {
+  const supabase = await createClient()
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
+  if (!user) redirect('/login?redirect=/welcome/implant')
 
-function Inner() {
-  const searchParams = useSearchParams()
-  const surgeonId = searchParams.get('surgeon')
-  const procedureId = searchParams.get('procedure')
-  if (!surgeonId || !procedureId) {
-    redirect('/welcome/surgeon')
-  }
+  const state = await gotoOnboardingStep(supabase, user.id, 3)
+  if (state.step !== 3) redirect('/welcome/surgeon')
 
   return (
     <OnboardingShell step={3} title="What's your top-choice implant?">
-      <FirstImplantForm surgeonId={surgeonId} procedureId={procedureId} />
+      <FirstImplantForm
+        surgeonId={state.surgeonId}
+        procedureId={state.procedureId}
+      />
     </OnboardingShell>
   )
 }
