@@ -2,7 +2,16 @@ import { createServerClient } from '@supabase/ssr'
 import { NextResponse, type NextRequest } from 'next/server'
 import { getOnboardingState } from '@/lib/profiles'
 
-const STANDARD_PUBLIC_PATHS = ['/login', '/auth/callback', '/share']
+// /api/webhooks is allowed unauthenticated because Stripe authenticates via
+// signature verification inside the route, not via a Supabase session cookie.
+// Without this, the middleware 307s the webhook to /login and Stripe never
+// reaches the handler.
+const STANDARD_PUBLIC_PATHS = [
+  '/login',
+  '/auth/callback',
+  '/share',
+  '/api/webhooks',
+]
 // Page navigations to /welcome are the wizard itself; all /api/* routes
 // must be allowed through so the wizard's forms can hit the existing
 // JSON endpoints. The auth check below still rejects unauthenticated
