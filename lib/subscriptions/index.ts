@@ -8,6 +8,7 @@ export type SubscriptionState = {
   tier: 'free' | 'pro'
   status: string | null
   subscriptionEnd: string | null
+  cancelAtPeriodEnd: boolean
 }
 
 async function fetchIsPro(
@@ -33,6 +34,7 @@ export async function getSubscription(
     tier: isPro ? 'pro' : 'free',
     status: profile?.subscription_status ?? null,
     subscriptionEnd: profile?.subscription_end ?? null,
+    cancelAtPeriodEnd: profile?.cancel_at_period_end ?? false,
   }
 }
 

@@ -107,6 +107,7 @@ export async function handleCheckoutComplete(
     stripe_subscription_id: subscription.id,
     subscription_status: subscription.status,
     subscription_end: endIso(item?.current_period_end ?? null),
+    cancel_at_period_end: subscription.cancel_at_period_end,
   })
 }
 
@@ -128,6 +129,7 @@ export async function handleSubscriptionUpdated(
   await upsertUserProfile(serviceSupabase, profile.user_id, {
     subscription_status: subscription.status,
     subscription_end: endIso(item?.current_period_end ?? null),
+    cancel_at_period_end: subscription.cancel_at_period_end,
   })
 }
 

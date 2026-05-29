@@ -30,6 +30,7 @@ export async function upsertUserProfile(
     stripe_subscription_id: string | null
     subscription_status: string | null
     subscription_end: string | null
+    cancel_at_period_end: boolean | null
   }>
 ): Promise<UserProfile> {
   const { data, error } = await supabase

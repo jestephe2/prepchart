@@ -59,6 +59,7 @@ export const UserProfileSchema = z.object({
   stripe_subscription_id: z.string().nullable().optional(),
   subscription_status: z.string().nullable().optional(),
   subscription_end: z.string().nullable().optional(),
+  cancel_at_period_end: z.boolean().nullable().optional(),
 })
 
 export type Surgeon = z.infer<typeof SurgeonSchema>

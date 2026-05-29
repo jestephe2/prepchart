@@ -42,8 +42,9 @@ export default async function AccountPage() {
             </p>
             {isPro && periodEnd && (
               <p className="text-sm text-white/60 mt-1">
-                {subscription.status === 'canceled'
-                  ? `Access ends ${formatDate(periodEnd)}.`
+                {subscription.status === 'canceled' ||
+                subscription.cancelAtPeriodEnd
+                  ? `Cancels ${formatDate(periodEnd)}.`
                   : `Renews ${formatDate(periodEnd)}.`}
               </p>
             )}
