@@ -103,11 +103,19 @@ export async function handleCheckoutComplete(
     return
   }
 
+  // Stripe Customer Portal can schedule cancellation either by flipping
+  // cancel_at_period_end OR by setting cancel_at to an explicit timestamp.
+  // Treat either as "cancellation pending."
+  const isCancelling =
+    subscription.cancel_at_period_end || subscription.cancel_at != null
+  const endTimestamp =
+    subscription.cancel_at ?? item?.current_period_end ?? null
+
   await upsertUserProfile(serviceSupabase, profile.user_id, {
     stripe_subscription_id: subscription.id,
     subscription_status: subscription.status,
-    subscription_end: endIso(item?.current_period_end ?? null),
-    cancel_at_period_end: subscription.cancel_at_period_end,
+    subscription_end: endIso(endTimestamp),
+    cancel_at_period_end: isCancelling,
   })
 }
 
@@ -126,10 +134,15 @@ export async function handleSubscriptionUpdated(
     return
   }
   const item = subscription.items.data[0]
+  const isCancelling =
+    subscription.cancel_at_period_end || subscription.cancel_at != null
+  const endTimestamp =
+    subscription.cancel_at ?? item?.current_period_end ?? null
+
   await upsertUserProfile(serviceSupabase, profile.user_id, {
     subscription_status: subscription.status,
-    subscription_end: endIso(item?.current_period_end ?? null),
-    cancel_at_period_end: subscription.cancel_at_period_end,
+    subscription_end: endIso(endTimestamp),
+    cancel_at_period_end: isCancelling,
   })
 }
 
