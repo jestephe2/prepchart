@@ -38,7 +38,7 @@ function Hero() {
         Pull up any surgeon, any procedure, any implant — in two taps.
       </p>
       <Link
-        href="/login"
+        href="/signup"
         className="mt-8 inline-block rounded-md bg-accent text-accent-dark font-semibold px-6 py-3 text-base"
       >
         Get started free
@@ -120,7 +120,7 @@ function CTAFooter() {
           Free to try. No credit card.
         </p>
         <Link
-          href="/login"
+          href="/signup"
           className="mt-7 inline-block rounded-md bg-accent text-accent-dark font-semibold px-6 py-3 text-base"
         >
           Get started free

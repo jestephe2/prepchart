@@ -25,7 +25,7 @@ export default async function SharePage({
 
   const isOwner = user?.id === share.created_by
   const claimHref = `/share/${token}/claim`
-  const loginRedirect = `/login?redirect=${encodeURIComponent(claimHref)}`
+  const signupRedirect = `/signup?redirect=${encodeURIComponent(claimHref)}`
 
   // Signed-in non-owner: clicking the share link IS the intent to save.
   // Skip the preview and send them straight through the claim flow,
@@ -84,7 +84,7 @@ export default async function SharePage({
           </div>
         ) : (
           <Link
-            href={loginRedirect}
+            href={signupRedirect}
             className="block w-full rounded-md bg-accent text-accent-dark font-semibold py-3 text-center"
           >
             Create a free account to save/edit

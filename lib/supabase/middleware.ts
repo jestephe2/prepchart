@@ -8,10 +8,19 @@ import { getOnboardingState } from '@/lib/profiles'
 // reaches the handler.
 const STANDARD_PUBLIC_PATHS = [
   '/login',
+  '/signup',
+  '/forgot-password',
+  '/update-password',
   '/auth/callback',
+  '/auth/confirm',
   '/share',
   '/api/webhooks',
 ]
+
+// Pages an already-authenticated user should be bounced away from. Honors
+// the ?redirect= query param before falling back to /, so the share-claim
+// flow works when a user is already logged in.
+const AUTH_PAGES = ['/login', '/signup', '/forgot-password', '/update-password']
 // Page navigations to /welcome are the wizard itself; all /api/* routes
 // must be allowed through so the wizard's forms can hit the existing
 // JSON endpoints. The auth check below still rejects unauthenticated
@@ -69,10 +78,14 @@ export async function updateSession(request: NextRequest) {
     return NextResponse.redirect(url)
   }
 
-  if (user && pathname === '/login') {
-    const url = request.nextUrl.clone()
-    url.pathname = '/'
-    return NextResponse.redirect(url)
+  if (user && AUTH_PAGES.includes(pathname)) {
+    const redirectParam = request.nextUrl.searchParams.get('redirect')
+    // Only honor same-origin path redirects (must start with '/' but not '//').
+    const safeRedirect =
+      redirectParam && redirectParam.startsWith('/') && !redirectParam.startsWith('//')
+        ? redirectParam
+        : '/'
+    return NextResponse.redirect(new URL(safeRedirect, request.url))
   }
 
   // Onboarding gate: authenticated users with onboarding_complete=false get

@@ -4,6 +4,7 @@ import { createClient } from '@/lib/supabase/server'
 import { getSubscription } from '@/lib/subscriptions'
 import { BillingActionButton } from '@/components/BillingActionButton'
 import { BottomNav } from '@/components/BottomNav'
+import { LogoutButton } from '@/components/LogoutButton'
 
 export default async function AccountPage() {
   const supabase = await createClient()
@@ -57,6 +58,19 @@ export default async function AccountPage() {
         </section>
 
         <BillingActionButton action={isPro ? 'manage' : 'upgrade'} />
+
+        <section className="mt-10 space-y-3">
+          <p className="text-xs uppercase tracking-wide text-white/50">
+            Security
+          </p>
+          <Link
+            href={`/forgot-password?email=${encodeURIComponent(user.email ?? '')}`}
+            className="block w-full rounded-md border border-border py-3 text-sm text-center font-medium text-white/90"
+          >
+            Change password
+          </Link>
+          <LogoutButton />
+        </section>
       </main>
       <BottomNav />
     </>
