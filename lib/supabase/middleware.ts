@@ -19,8 +19,11 @@ const STANDARD_PUBLIC_PATHS = [
 
 // Pages an already-authenticated user should be bounced away from. Honors
 // the ?redirect= query param before falling back to /, so the share-claim
-// flow works when a user is already logged in.
-const AUTH_PAGES = ['/login', '/signup', '/forgot-password', '/update-password']
+// flow works when a user is already logged in. Note: /update-password is
+// deliberately NOT here — the recovery-OTP flow signs the user in and then
+// lands them on /update-password to set a new password, so bouncing
+// authenticated users away would break the entire password-reset flow.
+const AUTH_PAGES = ['/login', '/signup', '/forgot-password']
 // Page navigations to /welcome are the wizard itself; all /api/* routes
 // must be allowed through so the wizard's forms can hit the existing
 // JSON endpoints. The auth check below still rejects unauthenticated
