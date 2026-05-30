@@ -3,7 +3,47 @@
 ## What This Is
 Mobile-first PWA for surgical device reps. Core flow: Surgeon → Procedure → Preference Card.
 
-**Current Phase: 2 — Write Layer**
+## Current Phase: post-V1, pre-public-launch (as of 2026-05-30)
+
+Phases 0–2 of the build sequence below are fully shipped. Phase 3 (Launch Readiness) is mostly shipped — Stripe + free-tier caps, onboarding wizard, landing page, magic-link branding, privacy policy. App is live at https://casecard.app on Supabase free tier.
+
+### What's live beyond the original plan
+
+- **Sharing flow** — `/share/[token]` for recipients, `/share/[token]/claim` server route that auto-copies the procedure into the recipient's account after sign-in. Idempotent via `source_share_token` on `procedures`. Owner-clicks-their-own-share → redirect to original, no duplicate.
+- **Auth rewrite** — email+password is the primary login method; magic link kept as a fallback. The magic link uses the stateless `verifyOtp({ type, token_hash })` pattern (cross-browser safe) via `/auth/confirm`, NOT the old PKCE `exchangeCodeForSession` pattern (which broke for recipients opening links in mobile email apps' in-app browsers). The legacy `/auth/callback` route still exists for any in-flight old-template links but is safe to delete.
+- **Password reset** — `/forgot-password` → email link → `/update-password`.
+- **Logout + change-password** — buttons on `/account`. Change password reuses the forgot-password flow.
+- **Onboarding resilience** — `/welcome/{surgeon,procedure,implant}` pages are server components that derive the current step from DB state via `resolveOnboardingStep` in `/lib/onboarding/`. PWA restart mid-flow resumes from existing data instead of creating duplicates.
+- **`on_auth_user_created` trigger** — Postgres trigger inserts a `user_profiles` row for every new `auth.users` insert. Guarantees the row exists before any reader hits it.
+
+### Schema deltas from the Phase 1 SQL below
+
+The schema in the "1.1 — Database Schema" build-sequence section is the original V1 plan but isn't fully accurate to what's deployed today. Live additions:
+
+- **`shares`** table: `id uuid pk`, `token text unique`, `procedure_id uuid → procedures`, `created_by uuid → auth.users`, `created_at`, `revoked_at nullable`. RLS scoped to creator.
+- **`user_profiles`** table: `user_id uuid pk → auth.users`, `onboarding_complete bool`, `stripe_customer_id`, `stripe_subscription_id`, `subscription_status`, `subscription_end`, `cancel_at_period_end`, `created_at`. Auto-populated by `on_auth_user_created` trigger.
+- **`procedures.source_share_token text`** column + partial index (where not null) — for server-side idempotent share copies.
+- **`implant_preferences`** is `preference_type` ('Implant Preference' | 'Bail Out'), `implant_name`, `part_number`, `detail_notes` — NOT the original `rank` + `product_name` schema. Update the Zod schema and data layer alongside any reference to this table.
+
+### Pre-launch checklist status
+
+- [x] Magic link email is branded (subject "Your CaseCard sign-in link", body uses our HTML template)
+- [x] PWA icon at all sizes
+- [x] Stripe webhook signed + idempotent via `processed_events`
+- [x] All form inputs validated with Zod
+- [x] Privacy policy page (`/privacy`)
+- [x] Foreign key indexes
+- [ ] Error monitoring (Sentry or Vercel Analytics) — not set up
+- [ ] Personally used in 5 real OR cases
+- [ ] First paying user
+
+### Known throttling note
+
+Supabase free tier kills queries that exceed its per-request timeout. Bursty test traffic (4+ signups in <10 min from one IP) can trip this and surface as `app/error.tsx`. Real-user traffic doesn't hit this. Upgrade to Pro before public launch.
+
+### Outstanding deferrals (per memory)
+
+- Implant reorder (up/down ordering within Implant Preference / Bail Out sections) — revisit after Phase 2 was the original plan; still deferred.
 
 ## Stack
 Next.js 16 App Router, TypeScript, Tailwind, Zod, Supabase, Vercel. PWA via next-pwa.
