@@ -40,19 +40,31 @@ function SignupForm() {
     const supabase = createClient()
     const { data, error } = await supabase.auth.signUp({ email, password })
 
-    if (error) {
-      setStatus('error')
-      setErrorMessage(error.message)
-      return
-    }
+    // Supabase signals "email already in use" two different ways depending on
+    // the project's email-confirmation setting:
+    //   1. Confirm email OFF → explicit error with code 'user_already_exists'
+    //      (sometimes 'email_address_already_in_use') and message "User already
+    //      registered".
+    //   2. Confirm email ON  → no error, but data.session is null (it silently
+    //      sends an account-already-exists notification email).
+    // Both should funnel to /login with the account-exists hint.
+    const alreadyExists =
+      (error &&
+        (error.code === 'user_already_exists' ||
+          error.code === 'email_address_already_in_use' ||
+          /already (registered|exists|in use)/i.test(error.message))) ||
+      (!error && !data.session)
 
-    // Supabase returns data.session = null with no error when the email already
-    // exists in auth.users (it silently sends a confirmation email). Don't push
-    // into the protected redirect — bounce to /login with a hint instead.
-    if (!data.session) {
+    if (alreadyExists) {
       router.push(
         `/login?email=${encodeURIComponent(email)}&hint=account_exists&redirect=${encodeURIComponent(redirect)}`
       )
+      return
+    }
+
+    if (error) {
+      setStatus('error')
+      setErrorMessage(error.message)
       return
     }
 
