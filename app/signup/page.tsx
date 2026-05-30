@@ -68,12 +68,7 @@ function SignupForm() {
       return
     }
 
-    // Brand-new signup with no specific redirect target: send directly to the
-    // first onboarding step instead of bouncing through / and letting middleware
-    // redirect. One fewer round-trip on the hop where Supabase compute is most
-    // likely to be cold/throttled.
-    const target = redirect === '/' ? '/welcome/surgeon' : redirect
-    router.push(target)
+    router.push(redirect)
     router.refresh()
   }
 
