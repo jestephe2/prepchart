@@ -58,10 +58,14 @@ function LoginForm() {
     setLinkError(null)
 
     const supabase = createClient()
-    const callback = `${window.location.origin}/auth/confirm?next=${encodeURIComponent(redirect)}`
+    // Pass the FINAL destination as emailRedirectTo. The Magic Link template
+    // wraps it as `/auth/confirm?...&next={{ .RedirectTo }}` itself; if we
+    // pre-wrap it here we'd get a nested /auth/confirm URL that breaks.
     const { error } = await supabase.auth.signInWithOtp({
       email,
-      options: { emailRedirectTo: callback },
+      options: {
+        emailRedirectTo: `${window.location.origin}${redirect}`,
+      },
     })
 
     if (error) {

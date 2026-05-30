@@ -28,9 +28,11 @@ function ForgotPasswordForm() {
     setErrorMessage(null)
 
     const supabase = createClient()
-    const redirectTo = `${window.location.origin}/auth/confirm?type=recovery&next=/update-password`
+    // The Reset Password email template wraps this as
+    // `/auth/confirm?type=recovery&next=/update-password` itself.
+    // We just need to pass an allowlisted URL for Supabase's safety check.
     const { error } = await supabase.auth.resetPasswordForEmail(email, {
-      redirectTo,
+      redirectTo: `${window.location.origin}/update-password`,
     })
 
     if (error) {
